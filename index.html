@@ -55,7 +55,7 @@ const { useState, useEffect } = React;
 
 /* SKIN BLOCK -- mirrors what reskinner v0.3 will produce. */
 const APP_NAME = 'Player Watch';
-const APP_VERSION = '1.0.2';
+const APP_VERSION = '1.0.3';
 const API_BASE = 'https://memorial-watch-backend-2.onrender.com';
 const PW_REPO = 'https://raw.githubusercontent.com/bspencer413/3Brains-sports-stats-watch/main';
 const SIGNIN_BG = PW_REPO + '/signin-background.jpg';
@@ -130,12 +130,16 @@ const fetchEspnPlayers = async (name) => {
 };
 const fetchEspnOverview = async (sport, league, id) => {
   if (!sport || !league || !id) return null;
-  try {
-    const url = 'https://site.web.api.espn.com/apis/common/v3/sports/' + sport + '/' + league + '/athletes/' + id + '/overview';
-    const r = await fetch(url);
-    if (!r.ok) return null;
-    return await r.json();
-  } catch(e) { return null; }
+  // Try multiple endpoints — ESPN has different CORS rules per path
+  const urls = [
+    'https://site.api.espn.com/apis/common/v3/sports/' + sport + '/' + league + '/athletes/' + id + '/overview',
+    'https://site.api.espn.com/apis/site/v2/sports/' + sport + '/' + league + '/athletes/' + id,
+    'https://sports.core.api.espn.com/v2/sports/' + sport + '/leagues/' + league + '/athletes/' + id
+  ];
+  for (var i = 0; i < urls.length; i++) {
+    try { const r = await fetch(urls[i]); if (r.ok) return await r.json(); } catch(e) {}
+  }
+  return null;
 };
 
 // Wikipedia
