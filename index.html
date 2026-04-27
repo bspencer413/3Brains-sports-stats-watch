@@ -55,7 +55,7 @@ const { useState, useEffect } = React;
 
 /* SKIN BLOCK -- mirrors what reskinner v0.3 will produce. */
 const APP_NAME = 'Player Watch';
-const APP_VERSION = '1.0.9';
+const APP_VERSION = '1.0.10';
 const API_BASE = 'https://playerwatch-backend.onrender.com';
 const PW_REPO = 'https://raw.githubusercontent.com/bspencer413/3Brains-sports-stats-watch/main';
 const SIGNIN_BG = PW_REPO + '/signin-background.jpg';
@@ -93,17 +93,21 @@ const buildSnapshot = (overview) => {
     news: ov.news || athleteRoot.news || ath.news || [],
     nextEvent: ov.nextEvent || athleteRoot.nextEvent || ath.nextEvent || [],
     statistics: st.statistics || ov.statistics || athleteRoot.statistics || null,
+    injuries: athleteRoot.injuries || ath.injuries || (ov.athlete && ov.athlete.injuries) || [],
   };
   const status = flat.status || {};
   const statusText = (status.type && (status.type.description || status.type.name)) || status.name || '';
   const news0 = flat.news && flat.news.length > 0 ? flat.news[0] : null;
   const next0 = flat.nextEvent && flat.nextEvent.length > 0 ? flat.nextEvent[0] : null;
+  const inj0 = flat.injuries && flat.injuries.length > 0 ? flat.injuries[0] : null;
   return {
     overview: flat,
     statusText: statusText,
     newsHeadline: news0 ? (news0.headline || news0.description || '') : '',
     newsPublished: news0 ? (news0.published || '') : '',
     nextEventDate: next0 ? (next0.date || '') : '',
+    injuryHeadline: inj0 ? (inj0.shortComment || inj0.longComment || inj0.description || '') : '',
+    injuryStatus: inj0 ? (inj0.status || (inj0.type && inj0.type.description) || '') : '',
     capturedAt: Date.now()
   };
 };
@@ -227,6 +231,7 @@ const StatPanel = ({ overview }) => {
   const news = (overview.news && overview.news.length > 0 && overview.news[0]) || null;
   const nextEvent = (overview.nextEvent && overview.nextEvent.length > 0 && overview.nextEvent[0]) || null;
   const stats = (overview.statistics && overview.statistics.splits && overview.statistics.splits.categories) || [];
+  const injury = (overview.injuries && overview.injuries.length > 0 && overview.injuries[0]) || null;
   const statusLower = (statusText || '').toLowerCase();
   var badgeColor = 'bg-green-700';
   if (statusLower.indexOf('out') >= 0 || statusLower.indexOf('injured') >= 0 || statusLower.indexOf('ir') >= 0) badgeColor = 'bg-red-700';
@@ -235,6 +240,13 @@ const StatPanel = ({ overview }) => {
   return (
     <div className="space-y-3">
       {statusText && (<div className={'px-4 py-2 rounded-xl text-center ' + badgeColor}><p className="text-white font-black text-2xl">{statusText.toUpperCase()}</p></div>)}
+      {injury && (injury.longComment || injury.shortComment || injury.description) && (
+        <div className="bg-red-950/40 border border-red-700/40 rounded-xl p-3">
+          <p className="text-red-300 text-sm font-bold mb-1">Injury Report{injury.status ? ' — ' + injury.status : ''}</p>
+          <p className="text-white text-base leading-snug">{injury.longComment || injury.shortComment || injury.description}</p>
+          {injury.date && <p className="text-gray-400 text-xs mt-1">{new Date(injury.date).toLocaleDateString()}</p>}
+        </div>
+      )}
       {(team || position) && (<div className="flex justify-between text-white text-xl">{team && <span><span className="text-gray-400">Team:</span> <strong>{team}</strong></span>}{position && <span><span className="text-gray-400">Pos:</span> <strong>{position}</strong></span>}</div>)}
       {nextEvent && (
         <div className="bg-black/30 border border-white/10 rounded-xl p-3">
