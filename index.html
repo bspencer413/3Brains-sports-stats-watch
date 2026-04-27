@@ -55,7 +55,7 @@ const { useState, useEffect } = React;
 
 /* SKIN BLOCK -- mirrors what reskinner v0.3 will produce. */
 const APP_NAME = 'Player Watch';
-const APP_VERSION = '1.0.7';
+const APP_VERSION = '1.0.8';
 const API_BASE = 'https://playerwatch-backend.onrender.com';
 const PW_REPO = 'https://raw.githubusercontent.com/bspencer413/3Brains-sports-stats-watch/main';
 const SIGNIN_BG = PW_REPO + '/signin-background.jpg';
@@ -78,12 +78,30 @@ const getStatSnapshot = (id) => { if (!id) return null; try { const raw = localS
 const deleteStatSnapshot = (id) => { if (!id) return; try { localStorage.removeItem(SNAPSHOT_KEY(id)); } catch(e) {} };
 const buildSnapshot = (overview) => {
   if (!overview) return null;
-  const status = overview.status || (overview.athlete && overview.athlete.status) || {};
+  // Backend now returns merged shape: { athlete, overview, bio, stats, gamelog }
+  // Flatten for StatPanel — pull fields from wherever they actually live.
+  const ath = overview.athlete || {};
+  const ov = overview.overview || {};
+  const bi = overview.bio || {};
+  const st = overview.stats || {};
+  const flat = {
+    // Identity (athlete root has displayName, team, position, status)
+    displayName: ath.displayName || ov.athlete && ov.athlete.displayName || '',
+    team: ath.team || (ov.athlete && ov.athlete.team) || null,
+    position: ath.position || (ov.athlete && ov.athlete.position) || null,
+    status: ath.status || (ov.athlete && ov.athlete.status) || null,
+    // Overview section carries news + next game
+    news: ov.news || ath.news || [],
+    nextEvent: ov.nextEvent || ath.nextEvent || [],
+    // Stats live under statistics in /stats endpoint, or under overview.statistics
+    statistics: st.statistics || ov.statistics || ath.statistics || null,
+  };
+  const status = flat.status || {};
   const statusText = (status.type && (status.type.description || status.type.name)) || status.name || '';
-  const news0 = (overview.news && overview.news[0]) || null;
-  const next0 = (overview.nextEvent && overview.nextEvent[0]) || null;
+  const news0 = flat.news && flat.news.length > 0 ? flat.news[0] : null;
+  const next0 = flat.nextEvent && flat.nextEvent.length > 0 ? flat.nextEvent[0] : null;
   return {
-    overview: overview,
+    overview: flat,
     statusText: statusText,
     newsHeadline: news0 ? (news0.headline || news0.description || '') : '',
     newsPublished: news0 ? (news0.published || '') : '',
