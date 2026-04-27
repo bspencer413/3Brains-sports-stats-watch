@@ -55,7 +55,7 @@ const { useState, useEffect } = React;
 
 /* SKIN BLOCK -- mirrors what reskinner v0.3 will produce. */
 const APP_NAME = 'Player Watch';
-const APP_VERSION = '1.0.4';
+const APP_VERSION = '1.0.5';
 const API_BASE = 'https://playerwatch-backend.onrender.com';
 const PW_REPO = 'https://raw.githubusercontent.com/bspencer413/3Brains-sports-stats-watch/main';
 const SIGNIN_BG = PW_REPO + '/signin-background.jpg';
@@ -101,6 +101,13 @@ const snapshotChanged = (oldSnap, newSnap) => {
 };
 
 // ESPN (via Player Watch backend proxy — bypasses browser CORS)
+const LEAGUE_TO_SPORT = {
+  nfl: 'football', ncaaf: 'football',
+  nba: 'basketball', wnba: 'basketball', ncaab: 'basketball', ncaam: 'basketball', ncaaw: 'basketball',
+  mlb: 'baseball',
+  nhl: 'hockey',
+  mls: 'soccer', 'eng.1': 'soccer', 'esp.1': 'soccer', 'ita.1': 'soccer', 'ger.1': 'soccer', 'fra.1': 'soccer'
+};
 const fetchEspnPlayers = async (name) => {
   try {
     const url = API_BASE + '/espn/search?name=' + encodeURIComponent(name) + '&limit=10';
@@ -114,11 +121,16 @@ const fetchEspnPlayers = async (name) => {
       if (g.type === 'player' || g.type === 'athlete') athletes = athletes.concat(g.contents || []);
     }
     return athletes.map(function(a) {
+      // ESPN encodes league in the link URL (e.g. /nfl/player/_/id/3139477/...)
+      var href = (a.link && a.link.web && a.link.web.href) || (a.links && a.links[0] && a.links[0].href) || '';
+      var leagueMatch = href.match(/espn\.com\/([a-z0-9.]+)\/(?:player|athlete)/i);
+      var league = leagueMatch ? leagueMatch[1].toLowerCase() : (a.defaultLeagueSlug || a.league || '');
+      var sport = LEAGUE_TO_SPORT[league] || a.defaultSportSlug || a.sport || '';
       return {
         id: a.id || (a.athlete && a.athlete.id),
         displayName: a.displayName || (a.athlete && a.athlete.displayName) || a.name || '',
-        sport: a.sport || (a.athlete && a.athlete.sport) || '',
-        league: a.league || (a.athlete && a.athlete.league) || '',
+        sport: sport,
+        league: league,
         team: (a.team && a.team.displayName) || (a.athlete && a.athlete.team && a.athlete.team.displayName) || '',
         position: (a.position && a.position.displayName) || (a.athlete && a.athlete.position && a.athlete.position.displayName) || '',
         headshot: (a.image && a.image.url) || (a.athlete && a.athlete.headshot && a.athlete.headshot.href) || '',
