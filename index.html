@@ -55,8 +55,8 @@ const { useState, useEffect } = React;
 
 /* SKIN BLOCK -- mirrors what reskinner v0.3 will produce. */
 const APP_NAME = 'Player Watch';
-const APP_VERSION = '1.0.3';
-const API_BASE = 'https://memorial-watch-backend-2.onrender.com';
+const APP_VERSION = '1.0.4';
+const API_BASE = 'https://playerwatch-backend.onrender.com';
 const PW_REPO = 'https://raw.githubusercontent.com/bspencer413/3Brains-sports-stats-watch/main';
 const SIGNIN_BG = PW_REPO + '/signin-background.jpg';
 const BILL_PHOTO = 'https://raw.githubusercontent.com/bspencer413/memorial-watch/main/Bill.jpeg';
@@ -100,11 +100,10 @@ const snapshotChanged = (oldSnap, newSnap) => {
   return false;
 };
 
-// ESPN
-const ESPN_SEARCH = 'https://site.web.api.espn.com/apis/search/v2';
+// ESPN (via Player Watch backend proxy — bypasses browser CORS)
 const fetchEspnPlayers = async (name) => {
   try {
-    const url = ESPN_SEARCH + '?region=us&lang=en&query=' + encodeURIComponent(name) + '&limit=10';
+    const url = API_BASE + '/espn/search?name=' + encodeURIComponent(name) + '&limit=10';
     const r = await fetch(url);
     if (!r.ok) return [];
     const data = await r.json();
@@ -130,16 +129,12 @@ const fetchEspnPlayers = async (name) => {
 };
 const fetchEspnOverview = async (sport, league, id) => {
   if (!sport || !league || !id) return null;
-  // Try multiple endpoints — ESPN has different CORS rules per path
-  const urls = [
-    'https://site.api.espn.com/apis/common/v3/sports/' + sport + '/' + league + '/athletes/' + id + '/overview',
-    'https://site.api.espn.com/apis/site/v2/sports/' + sport + '/' + league + '/athletes/' + id,
-    'https://sports.core.api.espn.com/v2/sports/' + sport + '/leagues/' + league + '/athletes/' + id
-  ];
-  for (var i = 0; i < urls.length; i++) {
-    try { const r = await fetch(urls[i]); if (r.ok) return await r.json(); } catch(e) {}
-  }
-  return null;
+  try {
+    const url = API_BASE + '/espn/overview?sport=' + encodeURIComponent(sport) + '&league=' + encodeURIComponent(league) + '&id=' + encodeURIComponent(id);
+    const r = await fetch(url);
+    if (!r.ok) return null;
+    return await r.json();
+  } catch(e) { return null; }
 };
 
 // Wikipedia
