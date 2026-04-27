@@ -55,7 +55,7 @@ const { useState, useEffect } = React;
 
 /* SKIN BLOCK -- mirrors what reskinner v0.3 will produce. */
 const APP_NAME = 'Player Watch';
-const APP_VERSION = '1.0.10';
+const APP_VERSION = '1.0.11';
 const API_BASE = 'https://playerwatch-backend.onrender.com';
 const PW_REPO = 'https://raw.githubusercontent.com/bspencer413/3Brains-sports-stats-watch/main';
 const SIGNIN_BG = PW_REPO + '/signin-background.jpg';
@@ -92,7 +92,7 @@ const buildSnapshot = (overview) => {
     status: athleteRoot.status || ath.status || (ov.athlete && ov.athlete.status) || null,
     news: ov.news || athleteRoot.news || ath.news || [],
     nextEvent: ov.nextEvent || athleteRoot.nextEvent || ath.nextEvent || [],
-    statistics: st.statistics || ov.statistics || athleteRoot.statistics || null,
+    statistics: st || ov.statistics || athleteRoot.statistics || null,
     injuries: athleteRoot.injuries || ath.injuries || (ov.athlete && ov.athlete.injuries) || [],
   };
   const status = flat.status || {};
@@ -230,7 +230,7 @@ const StatPanel = ({ overview }) => {
   const position = (overview.position && overview.position.displayName) || (overview.athlete && overview.athlete.position && overview.athlete.position.displayName) || '';
   const news = (overview.news && overview.news.length > 0 && overview.news[0]) || null;
   const nextEvent = (overview.nextEvent && overview.nextEvent.length > 0 && overview.nextEvent[0]) || null;
-  const stats = (overview.statistics && overview.statistics.splits && overview.statistics.splits.categories) || [];
+  const stats = (overview.statistics && (overview.statistics.categories || (overview.statistics.splits && overview.statistics.splits.categories))) || [];
   const injury = (overview.injuries && overview.injuries.length > 0 && overview.injuries[0]) || null;
   const statusLower = (statusText || '').toLowerCase();
   var badgeColor = 'bg-green-700';
@@ -258,16 +258,25 @@ const StatPanel = ({ overview }) => {
       {stats.length > 0 && (
         <div className="bg-black/30 border border-white/10 rounded-xl p-3">
           <p className="text-gray-400 text-sm mb-2">Season Stats</p>
-          {stats.slice(0, 3).map((cat, i) => (
-            <div key={i} className="mb-2 last:mb-0">
-              {cat.displayName && <p className="text-white/70 text-base font-bold">{cat.displayName}</p>}
-              <div className="grid grid-cols-2 gap-2 mt-1">
-                {(cat.stats || []).slice(0, 6).map((s, j) => (
-                  <div key={j} className="flex justify-between text-white text-base"><span className="text-gray-400">{s.shortDisplayName || s.name}</span><span className="font-bold">{s.displayValue || s.value || '-'}</span></div>
-                ))}
+          {stats.slice(0, 3).map((cat, i) => {
+            const labels = cat.labels || cat.names || [];
+            const seasonRows = cat.statistics || [];
+            const latestRow = seasonRows.length > 0 ? seasonRows[seasonRows.length - 1] : null;
+            const values = (latestRow && latestRow.stats) || [];
+            const seasonYear = latestRow && latestRow.season ? (latestRow.season.displayName || latestRow.season.year) : '';
+            const pairs = labels.map((lbl, idx) => ({ label: lbl, value: values[idx] })).filter(p => p.value !== undefined && p.value !== '' && p.value !== '0');
+            if (pairs.length === 0) return null;
+            return (
+              <div key={i} className="mb-2 last:mb-0">
+                {(cat.displayName || seasonYear) && <p className="text-white/70 text-base font-bold">{cat.displayName}{seasonYear ? ' — ' + seasonYear : ''}</p>}
+                <div className="grid grid-cols-2 gap-2 mt-1">
+                  {pairs.slice(0, 8).map((p, j) => (
+                    <div key={j} className="flex justify-between text-white text-base"><span className="text-gray-400">{p.label}</span><span className="font-bold">{p.value}</span></div>
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
       {news && (
