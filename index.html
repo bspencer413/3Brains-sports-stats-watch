@@ -19,6 +19,9 @@
   <meta property="og:type" content="website">
   <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjogIlBsYXllciBXYXRjaCIsICJzaG9ydF9uYW1lIjogIlBXIiwgInN0YXJ0X3VybCI6ICIvIiwgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsICJiYWNrZ3JvdW5kX2NvbG9yIjogIiMxMjA1MjAiLCAidGhlbWVfY29sb3IiOiAiIzAwMzNBMCJ9">
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Graduate&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -55,7 +58,7 @@ const { useState, useEffect } = React;
 
 /* SKIN BLOCK -- mirrors what reskinner v0.3 will produce. */
 const APP_NAME = 'Player Watch';
-const APP_VERSION = '1.0.12';
+const APP_VERSION = '1.0.13';
 const API_BASE = 'https://playerwatch-backend.onrender.com';
 const PW_REPO = 'https://raw.githubusercontent.com/bspencer413/3Brains-sports-stats-watch/main';
 const SIGNIN_BG = PW_REPO + '/signin-background.jpg';
@@ -591,8 +594,8 @@ function App() {
         <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(0,0,0,0.30)', zIndex: 1 }} />
         <div style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', alignItems: 'stretch', flex: 1, justifyContent: 'flex-end' }}>
           <div style={{ textAlign: 'center', padding: '2rem 1.5rem 1rem' }}>
-            <h1 style={{ color: '#fff', fontSize: isPhone ? '3rem' : '4rem', fontWeight: 900, textShadow: '0 4px 16px rgba(0,0,0,0.9)', margin: 0 }}>{APP_NAME}</h1>
-            <p style={{ color: '#fff', fontSize: isPhone ? '1.2rem' : '1.5rem', textShadow: '0 2px 8px rgba(0,0,0,0.9)', marginTop: '0.5rem' }}>{TAGLINE_SUB}</p>
+            <h1 style={{ color: '#fff', fontSize: isPhone ? '4rem' : '5.5rem', fontWeight: 900, fontFamily: "'Graduate', Georgia, serif", letterSpacing: '0.04em', lineHeight: 0.95, textShadow: '0 4px 16px rgba(0,0,0,0.9)', margin: 0 }}>PLAYER<br/>WATCH</h1>
+            <p style={{ color: '#fff', fontSize: isPhone ? '1.2rem' : '1.5rem', textShadow: '0 2px 8px rgba(0,0,0,0.9)', marginTop: '1rem' }}>{TAGLINE_SUB}</p>
           </div>
           <div style={{ paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
             <div className="rounded-2xl p-4 shadow-2xl space-y-3" style={{ backgroundColor: 'rgba(0,0,0,0.65)', backdropFilter: 'blur(8px)', borderColor: 'var(--pw-card-border)', borderWidth: '1px' }}>
