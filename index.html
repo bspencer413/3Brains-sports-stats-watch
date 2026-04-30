@@ -59,7 +59,7 @@ const { useState, useEffect } = React;
 
 /* SKIN BLOCK -- mirrors what reskinner v0.3 will produce. */
 const APP_NAME = 'Player Watch';
-const APP_VERSION = '1.0.17';
+const APP_VERSION = '1.0.18';
 const API_BASE = 'https://playerwatch-backend.onrender.com';
 const PW_REPO = 'https://raw.githubusercontent.com/bspencer413/3Brains-sports-stats-watch/main';
 const SIGNIN_BG = PW_REPO + '/signin-background.jpg';
@@ -628,7 +628,7 @@ function App() {
     <PageWrapper>
       <Drawer />
       {toast && (
-        <div style={{ position: 'fixed', left: '50%', transform: 'translateX(-50%)', bottom: 'calc(6rem + env(safe-area-inset-bottom))', zIndex: 200, backgroundColor: 'rgba(0,0,0,0.9)', color: '#fff', padding: '0.85rem 1.4rem', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.2)', fontSize: '1.1rem', fontWeight: 600, boxShadow: '0 4px 16px rgba(0,0,0,0.6)', whiteSpace: 'nowrap' }}>{toast}</div>
+        <div style={{ position: 'fixed', left: '50%', transform: 'translateX(-50%)', bottom: 'calc(6rem + env(safe-area-inset-bottom))', zIndex: 200, backgroundColor: 'var(--pw-accent)', color: '#fff', padding: '1.1rem 1.8rem', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.25)', fontSize: '1.5rem', fontWeight: 700, boxShadow: '0 6px 20px rgba(0,0,0,0.6)', whiteSpace: 'nowrap' }}>{toast}</div>
       )}
       <div className={containerClass}>
 
