@@ -36,6 +36,7 @@
       --pw-card-bg: rgba(0,0,0,0.55);
       --pw-card-border: rgba(255,255,255,0.15);
       --pw-drawer-bg: #0a0a1e;
+      --pw-display-font: 'Graduate', Georgia, serif;
     }
     * { -webkit-tap-highlight-color: transparent; font-family: Georgia, 'Times New Roman', serif; }
     html, body { height: 100%; overflow-x: hidden; }
@@ -58,7 +59,7 @@ const { useState, useEffect } = React;
 
 /* SKIN BLOCK -- mirrors what reskinner v0.3 will produce. */
 const APP_NAME = 'Player Watch';
-const APP_VERSION = '1.0.14';
+const APP_VERSION = '1.0.16';
 const API_BASE = 'https://playerwatch-backend.onrender.com';
 const PW_REPO = 'https://raw.githubusercontent.com/bspencer413/3Brains-sports-stats-watch/main';
 const SIGNIN_BG = PW_REPO + '/signin-background.jpg';
@@ -213,7 +214,7 @@ const ClearableInput = ({ value, onChange, onBlur, onKeyPress, placeholder, type
 
 const CardPageHeader = ({ title, subtitle }) => (
   <div className="mb-3 pb-2 border-b border-white/15 text-center">
-    <h2 className="text-4xl font-black text-white tracking-wide">{title}</h2>
+    <h2 className="text-4xl font-black text-white" style={{ fontFamily: 'var(--pw-display-font)', letterSpacing: '0.06em', textTransform: 'uppercase', WebkitTextStroke: '1px #fff' }}>{title}</h2>
     {subtitle && <p className="text-gray-200 text-xl mt-1">{subtitle}</p>}
   </div>
 );
@@ -594,7 +595,7 @@ function App() {
         <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(0,0,0,0.30)', zIndex: 1 }} />
         <div style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', alignItems: 'stretch', flex: 1, justifyContent: 'center' }}>
           <div style={{ textAlign: 'center', padding: '1rem 1.5rem 2rem' }}>
-            <h1 style={{ color: '#fff', fontSize: isPhone ? '5.5rem' : '7.5rem', fontWeight: 900, fontFamily: "'Graduate', Georgia, serif", letterSpacing: '0.04em', lineHeight: 0.9, WebkitTextStroke: '2px #fff', textShadow: '0 4px 20px rgba(0,0,0,0.95), 0 2px 8px rgba(0,0,0,0.9)', margin: 0 }}>PLAYER<br/>WATCH</h1>
+            <h1 style={{ color: '#fff', fontSize: isPhone ? '5.5rem' : '7.5rem', fontWeight: 900, fontFamily: 'var(--pw-display-font)', letterSpacing: '0.04em', lineHeight: 0.9, WebkitTextStroke: '2px #fff', textShadow: '0 4px 20px rgba(0,0,0,0.95), 0 2px 8px rgba(0,0,0,0.9)', margin: 0 }}>PLAYER<br/>WATCH</h1>
             <p style={{ color: '#fff', fontSize: isPhone ? '1.3rem' : '1.6rem', textShadow: '0 2px 8px rgba(0,0,0,0.9)', marginTop: '1.25rem' }}>{TAGLINE_SUB}</p>
           </div>
           <div style={{ paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
@@ -625,7 +626,7 @@ function App() {
         {page === 'search' && (
           <div className="space-y-3" style={{ paddingTop: PT }}>
             <div className="flex flex-col items-center justify-center" style={{ height: PT, marginTop: '-' + PT, paddingTop: '0.5rem', pointerEvents: 'none' }}>
-              <h1 className="text-white font-black text-center" style={{ fontSize: isPhone ? '3rem' : '4rem', textShadow: '0 4px 16px rgba(0,0,0,0.9)' }}>{APP_NAME}</h1>
+              <h1 className="text-white font-black text-center" style={{ fontSize: isPhone ? '4rem' : '5.5rem', fontFamily: 'var(--pw-display-font)', letterSpacing: '0.04em', lineHeight: 0.9, textShadow: '0 4px 16px rgba(0,0,0,0.9)' }}>PLAYER<br/>WATCH</h1>
               <p className="text-white text-center mt-2" style={{ fontSize: isPhone ? '1.6rem' : '2.2rem', whiteSpace: 'nowrap', textShadow: '0 2px 8px rgba(0,0,0,0.9)' }}>{TAGLINE}</p>
               <p className="text-white/90 text-center" style={{ fontSize: isPhone ? '1.0rem' : '1.2rem', textShadow: '0 1px 4px rgba(0,0,0,0.9)', marginTop: '0.4rem' }}>{TAGLINE_SUB}</p>
             </div>
