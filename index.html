@@ -19,6 +19,9 @@
   <meta property="og:type" content="website">
   <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjogIlBsYXllciBXYXRjaCIsICJzaG9ydF9uYW1lIjogIlBXIiwgInN0YXJ0X3VybCI6ICIvIiwgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsICJiYWNrZ3JvdW5kX2NvbG9yIjogIiMxMjA1MjAiLCAidGhlbWVfY29sb3IiOiAiIzAwMzNBMCJ9">
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Graduate&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -33,6 +36,7 @@
       --pw-card-bg: rgba(0,0,0,0.55);
       --pw-card-border: rgba(255,255,255,0.15);
       --pw-drawer-bg: #0a0a1e;
+      --pw-display-font: 'Graduate', Georgia, serif;
     }
     * { -webkit-tap-highlight-color: transparent; font-family: Georgia, 'Times New Roman', serif; }
     html, body { height: 100%; overflow-x: hidden; }
@@ -55,7 +59,7 @@ const { useState, useEffect } = React;
 
 /* SKIN BLOCK -- mirrors what reskinner v0.3 will produce. */
 const APP_NAME = 'Player Watch';
-const APP_VERSION = '1.0.11';
+const APP_VERSION = '1.0.24';
 const API_BASE = 'https://playerwatch-backend.onrender.com';
 const PW_REPO = 'https://raw.githubusercontent.com/bspencer413/3Brains-sports-stats-watch/main';
 const SIGNIN_BG = PW_REPO + '/signin-background.jpg';
@@ -92,7 +96,7 @@ const buildSnapshot = (overview) => {
     status: athleteRoot.status || ath.status || (ov.athlete && ov.athlete.status) || null,
     news: ov.news || athleteRoot.news || ath.news || [],
     nextEvent: ov.nextEvent || athleteRoot.nextEvent || ath.nextEvent || [],
-    statistics: st.statistics || ov.statistics || athleteRoot.statistics || null,
+    statistics: st || ov.statistics || athleteRoot.statistics || null,
     injuries: athleteRoot.injuries || ath.injuries || (ov.athlete && ov.athlete.injuries) || [],
   };
   const status = flat.status || {};
@@ -120,7 +124,7 @@ const snapshotChanged = (oldSnap, newSnap) => {
   return false;
 };
 
-// ESPN (via Player Watch backend proxy -- bypasses browser CORS)
+// ESPN (via Player Watch backend proxy — bypasses browser CORS)
 const LEAGUE_TO_SPORT = {
   nfl: 'football', ncaaf: 'football',
   nba: 'basketball', wnba: 'basketball', ncaab: 'basketball', ncaam: 'basketball', ncaaw: 'basketball',
@@ -146,7 +150,7 @@ const fetchEspnPlayers = async (name) => {
       var leagueMatch = href.match(/espn\.com\/([a-z0-9.]+)\/(?:player|athlete)/i);
       var league = leagueMatch ? leagueMatch[1].toLowerCase() : (a.defaultLeagueSlug || a.league || '');
       var sport = LEAGUE_TO_SPORT[league] || a.defaultSportSlug || a.sport || '';
-      // Extract integer athlete ID -- ESPN's uid format is "s:20~l:28~a:3139477"
+      // Extract integer athlete ID — ESPN's uid format is "s:20~l:28~a:3139477"
       // a.id is a GUID and won't work for athlete endpoints
       var athleteId = '';
       if (a.uid) {
@@ -203,14 +207,14 @@ const EyeOffIcon = () => (<svg className="w-5 h-5" fill="none" stroke="currentCo
 
 const ClearableInput = ({ value, onChange, onBlur, onKeyPress, placeholder, type='text', maxLength, inputClass }) => (
   <div className="relative">
-    <input type={type} placeholder={placeholder} value={value} onChange={onChange} onBlur={onBlur} onKeyPress={onKeyPress} maxLength={maxLength} className={inputClass + ' pr-10'} autoCorrect="off" autoCapitalize="words" autoComplete="off" spellCheck="false" />
+    <input type={type} name="player-search" inputMode="search" placeholder={placeholder} value={value} onChange={onChange} onBlur={onBlur} onKeyPress={onKeyPress} maxLength={maxLength} className={inputClass + ' pr-10'} autoCorrect="off" autoCapitalize="words" autoComplete="off" spellCheck="false" />
     {value && value.length > 0 && (<button onClick={() => onChange({ target: { value: '' } })} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white text-xl font-bold leading-none" type="button">X</button>)}
   </div>
 );
 
 const CardPageHeader = ({ title, subtitle }) => (
   <div className="mb-3 pb-2 border-b border-white/15 text-center">
-    <h2 className="text-4xl font-black text-white tracking-wide">{title}</h2>
+    <h2 className="text-4xl font-black text-white" style={{ fontFamily: 'var(--pw-display-font)', letterSpacing: '0.06em', textTransform: 'uppercase', WebkitTextStroke: '1px #fff' }}>{title}</h2>
     {subtitle && <p className="text-gray-200 text-xl mt-1">{subtitle}</p>}
   </div>
 );
@@ -230,7 +234,7 @@ const StatPanel = ({ overview }) => {
   const position = (overview.position && overview.position.displayName) || (overview.athlete && overview.athlete.position && overview.athlete.position.displayName) || '';
   const news = (overview.news && overview.news.length > 0 && overview.news[0]) || null;
   const nextEvent = (overview.nextEvent && overview.nextEvent.length > 0 && overview.nextEvent[0]) || null;
-  const stats = (overview.statistics && overview.statistics.splits && overview.statistics.splits.categories) || [];
+  const stats = (overview.statistics && (overview.statistics.categories || (overview.statistics.splits && overview.statistics.splits.categories))) || [];
   const injury = (overview.injuries && overview.injuries.length > 0 && overview.injuries[0]) || null;
   const statusLower = (statusText || '').toLowerCase();
   var badgeColor = 'bg-green-700';
@@ -242,7 +246,7 @@ const StatPanel = ({ overview }) => {
       {statusText && (<div className={'px-4 py-2 rounded-xl text-center ' + badgeColor}><p className="text-white font-black text-2xl">{statusText.toUpperCase()}</p></div>)}
       {injury && (injury.longComment || injury.shortComment || injury.description) && (
         <div className="bg-red-950/40 border border-red-700/40 rounded-xl p-3">
-          <p className="text-red-300 text-sm font-bold mb-1">Injury Report{injury.status ? ' -- ' + injury.status : ''}</p>
+          <p className="text-red-300 text-sm font-bold mb-1">Injury Report{injury.status ? ' — ' + injury.status : ''}</p>
           <p className="text-white text-base leading-snug">{injury.longComment || injury.shortComment || injury.description}</p>
           {injury.date && <p className="text-gray-400 text-xs mt-1">{new Date(injury.date).toLocaleDateString()}</p>}
         </div>
@@ -258,16 +262,25 @@ const StatPanel = ({ overview }) => {
       {stats.length > 0 && (
         <div className="bg-black/30 border border-white/10 rounded-xl p-3">
           <p className="text-gray-400 text-sm mb-2">Season Stats</p>
-          {stats.slice(0, 3).map((cat, i) => (
-            <div key={i} className="mb-2 last:mb-0">
-              {cat.displayName && <p className="text-white/70 text-base font-bold">{cat.displayName}</p>}
-              <div className="grid grid-cols-2 gap-2 mt-1">
-                {(cat.stats || []).slice(0, 6).map((s, j) => (
-                  <div key={j} className="flex justify-between text-white text-base"><span className="text-gray-400">{s.shortDisplayName || s.name}</span><span className="font-bold">{s.displayValue || s.value || '-'}</span></div>
-                ))}
+          {stats.slice(0, 3).map((cat, i) => {
+            const labels = cat.labels || cat.names || [];
+            const seasonRows = cat.statistics || [];
+            const latestRow = seasonRows.length > 0 ? seasonRows[seasonRows.length - 1] : null;
+            const values = (latestRow && latestRow.stats) || [];
+            const seasonYear = latestRow && latestRow.season ? (latestRow.season.displayName || latestRow.season.year) : '';
+            const pairs = labels.map((lbl, idx) => ({ label: lbl, value: values[idx] })).filter(p => p.value !== undefined && p.value !== '' && p.value !== '0');
+            if (pairs.length === 0) return null;
+            return (
+              <div key={i} className="mb-2 last:mb-0">
+                {(cat.displayName || seasonYear) && <p className="text-white/70 text-base font-bold">{cat.displayName}{seasonYear ? ' — ' + seasonYear : ''}</p>}
+                <div className="grid grid-cols-2 gap-2 mt-1">
+                  {pairs.slice(0, 8).map((p, j) => (
+                    <div key={j} className="flex justify-between text-white text-base"><span className="text-gray-400">{p.label}</span><span className="font-bold">{p.value}</span></div>
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
       {news && (
@@ -304,6 +317,12 @@ function App() {
   const [drawerData, setDrawerData] = useState(null);
   const [autoOpenId, setAutoOpenId] = useState(null);
   const [apiVersion, setApiVersion] = useState('...');
+  const [toast, setToast] = useState(null);
+
+  const showToast = (msg) => {
+    setToast(msg);
+    setTimeout(() => setToast(null), 2400);
+  };
 
   useEffect(() => {
     fetch(API_BASE + '/health').then(r => r.json()).then(d => setApiVersion(d.version || '?')).catch(() => setApiVersion('?'));
@@ -393,7 +412,7 @@ function App() {
     finally { setSearching(false); }
   };
 
-  // SAVE: POST -> fetch ESPN overview -> store snapshot -> navigate -> auto-open My Players drawer
+  // SAVE: POST → fetch ESPN overview → store snapshot → navigate → auto-open My Players drawer
   const savePlayer = async () => {
     if (!selectedPlayer && !(searchResults && searchResults.queryName)) return;
     const playerName = selectedPlayer ? selectedPlayer.displayName : (searchResults && searchResults.queryName);
@@ -470,7 +489,7 @@ function App() {
     setDrawerData(prev => prev ? Object.assign({}, prev, { wiki: wiki, snapshot: snapshot, loading: false }) : null);
   };
 
-  // Check for new stats: re-fetch, diff, switch drawer if changed
+  // Check for new stats: re-fetch, diff, transform drawer in place (no nav jump)
   const checkForNewStats = async () => {
     if (!drawerData || !drawerData.watchlistId) return;
     const meta = drawerData.meta;
@@ -481,10 +500,12 @@ function App() {
       const newSnap = buildSnapshot(overview);
       if (!newSnap) { alert('Could not reach ESPN. Try again later.'); return; }
       const oldSnap = getStatSnapshot(drawerData.watchlistId);
-      if (!snapshotChanged(oldSnap, newSnap)) { alert('No new stats yet.'); return; }
+      if (!snapshotChanged(oldSnap, newSnap)) { showToast('No Stats Yet, Try Later'); return; }
       saveStatSnapshot(drawerData.watchlistId, newSnap);
-      const wid = drawerData.watchlistId;
-      setDrawerData(null); setPage('myplayers'); setAutoOpenId(wid);
+      // Transform the open drawer from watchlist-mode to myplayers-mode in place.
+      // User stays on whatever page they were on (Watchlist most often).
+      // Closing the drawer naturally returns them to that page.
+      setDrawerData(prev => prev ? Object.assign({}, prev, { mode: 'myplayers', snapshot: newSnap }) : null);
     } catch(e) { alert('Error: ' + e.message); }
     finally { setCheckingStats(false); }
   };
@@ -503,7 +524,7 @@ function App() {
       <div className="rounded-2xl overflow-hidden border border-white/15 shadow-lg" style={{ backgroundColor: 'rgba(0,0,0,0.55)' }}>
         <div className="px-5 py-3 text-center" style={{ background: 'linear-gradient(90deg, var(--pw-accent-2), var(--pw-accent))' }}>
           <p className="text-white font-black text-3xl">{display}</p>
-          {espnPlayer && (espnPlayer.team || espnPlayer.position) && (<p className="text-white/90 text-xl">{[espnPlayer.team, espnPlayer.position].filter(Boolean).join(' \u2022 ')}</p>)}
+          {espnPlayer && (espnPlayer.team || espnPlayer.position) && (<p className="text-white/90 text-xl">{[espnPlayer.team, espnPlayer.position].filter(Boolean).join(' • ')}</p>)}
         </div>
         <div className="p-4">
           <div className="flex gap-3 items-start mb-3">
@@ -546,7 +567,7 @@ function App() {
               <>
                 <div className="px-4 py-3 rounded-xl mb-3 text-center" style={{ background: 'linear-gradient(90deg, var(--pw-accent-2), var(--pw-accent))' }}>
                   <p className="text-white font-black text-3xl">{name}</p>
-                  {meta && (meta.team || meta.position) && (<p className="text-white/90 text-xl">{[meta.team, meta.position].filter(Boolean).join(' \u2022 ')}</p>)}
+                  {meta && (meta.team || meta.position) && (<p className="text-white/90 text-xl">{[meta.team, meta.position].filter(Boolean).join(' • ')}</p>)}
                 </div>
                 <div className="flex gap-3 items-start mb-3">
                   {photo ? <img src={photo} alt={name} className="w-20 h-20 rounded-full object-cover border-2 border-white/30 shrink-0" /> : <div className="w-20 h-20 rounded-full bg-black/40 flex items-center justify-center shrink-0 text-2xl text-white">?</div>}
@@ -563,6 +584,7 @@ function App() {
                 )}
                 {mode === 'myplayers' && <StatPanel overview={overview} />}
                 {mode === 'myplayers' && snapshot && snapshot.capturedAt && (<p className="text-white/40 text-sm text-center mt-3">Last updated {new Date(snapshot.capturedAt).toLocaleString()}</p>)}
+                {mode === 'myplayers' && (<p className="text-gray-400 text-sm text-center mt-2">Bio: Wikipedia. Stats &amp; news: ESPN.</p>)}
               </>
             )}
             <button onClick={() => setDrawerData(null)} className="w-full py-4 bg-white/10 border border-white/20 text-white rounded-xl text-xl mt-4">Close</button>
@@ -574,13 +596,13 @@ function App() {
 
   if (page === 'login') {
     return (
-      <div style={{ minHeight: '100dvh', width: '100%', position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'stretch', paddingBottom: '2rem', backgroundColor: '#120520' }}>
+      <div style={{ minHeight: '100dvh', width: '100%', position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'stretch', paddingTop: 'env(safe-area-inset-top)', paddingBottom: '2rem', backgroundColor: '#120520' }}>
         <div style={{ position: 'absolute', inset: 0, backgroundImage: 'url(' + SIGNIN_BG + ')', backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat', filter: 'var(--pw-signin-blur)', zIndex: 0 }} />
         <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(0,0,0,0.30)', zIndex: 1 }} />
-        <div style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', alignItems: 'stretch', flex: 1, justifyContent: 'flex-end' }}>
-          <div style={{ textAlign: 'center', padding: '2rem 1.5rem 1rem' }}>
-            <h1 style={{ color: '#fff', fontSize: isPhone ? '3rem' : '4rem', fontWeight: 900, textShadow: '0 4px 16px rgba(0,0,0,0.9)', margin: 0 }}>{APP_NAME}</h1>
-            <p style={{ color: '#fff', fontSize: isPhone ? '1.2rem' : '1.5rem', textShadow: '0 2px 8px rgba(0,0,0,0.9)', marginTop: '0.5rem' }}>{TAGLINE_SUB}</p>
+        <div style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', alignItems: 'stretch', flex: 1, justifyContent: 'center' }}>
+          <div style={{ textAlign: 'center', padding: '2rem 1.5rem 1.5rem' }}>
+            <h1 style={{ color: '#fff', fontSize: isPhone ? '5rem' : '7rem', fontWeight: 900, fontFamily: 'var(--pw-display-font)', letterSpacing: '0.04em', lineHeight: 0.9, WebkitTextStroke: '2px #fff', textShadow: '0 4px 20px rgba(0,0,0,0.95), 0 2px 8px rgba(0,0,0,0.9)', margin: 0 }}>PLAYER<br/>WATCH</h1>
+            <p style={{ color: '#fff', fontSize: isPhone ? '1.8rem' : '2.2rem', fontFamily: 'var(--pw-display-font)', letterSpacing: '0.04em', lineHeight: 1.15, textShadow: '0 2px 8px rgba(0,0,0,0.9)', marginTop: '1.25rem' }}>Track Players Across<br/>all major sports</p>
           </div>
           <div style={{ paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
             <div className="rounded-2xl p-4 shadow-2xl space-y-3" style={{ backgroundColor: 'rgba(0,0,0,0.65)', backdropFilter: 'blur(8px)', borderColor: 'var(--pw-card-border)', borderWidth: '1px' }}>
@@ -605,14 +627,16 @@ function App() {
   return (
     <PageWrapper>
       <Drawer />
+      {toast && (
+        <div style={{ position: 'fixed', left: '50%', transform: 'translateX(-50%)', bottom: 'calc(6rem + env(safe-area-inset-bottom))', zIndex: 200, backgroundColor: 'var(--pw-accent)', color: '#fff', padding: '1.1rem 1.8rem', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.25)', fontSize: '1.5rem', fontWeight: 700, boxShadow: '0 6px 20px rgba(0,0,0,0.6)', whiteSpace: 'nowrap' }}>{toast}</div>
+      )}
       <div className={containerClass}>
 
         {page === 'search' && (
           <div className="space-y-3" style={{ paddingTop: PT }}>
-            <div className="flex flex-col items-center justify-center" style={{ height: PT, marginTop: '-' + PT, paddingTop: '0.5rem', pointerEvents: 'none' }}>
-              <h1 className="text-white font-black text-center" style={{ fontSize: isPhone ? '3rem' : '4rem', textShadow: '0 4px 16px rgba(0,0,0,0.9)' }}>{APP_NAME}</h1>
-              <p className="text-white text-center mt-2" style={{ fontSize: isPhone ? '1.6rem' : '2.2rem', whiteSpace: 'nowrap', textShadow: '0 2px 8px rgba(0,0,0,0.9)' }}>{TAGLINE}</p>
-              <p className="text-white/90 text-center" style={{ fontSize: isPhone ? '1.0rem' : '1.2rem', textShadow: '0 1px 4px rgba(0,0,0,0.9)', marginTop: '0.4rem' }}>{TAGLINE_SUB}</p>
+            <div className="flex flex-col items-center" style={{ height: PT, marginTop: '-' + PT, paddingTop: '4rem', paddingBottom: '1.5rem', pointerEvents: 'none' }}>
+              <h1 className="text-white font-black text-center" style={{ fontSize: isPhone ? '5.5rem' : '7.5rem', fontFamily: 'var(--pw-display-font)', letterSpacing: '0.04em', lineHeight: 0.9, textShadow: '0 4px 16px rgba(0,0,0,0.9)' }}>PLAYER<br/>WATCH</h1>
+              <p className="text-white text-center" style={{ fontSize: isPhone ? '2rem' : '2.6rem', fontFamily: 'var(--pw-display-font)', letterSpacing: '0.04em', lineHeight: 1.05, textShadow: '0 2px 8px rgba(0,0,0,0.9)', marginTop: '1rem' }}>Who Are You<br/>Watching?</p>
             </div>
             <div className={cardClass} style={Object.assign({}, cardStyle, { overflowY: 'auto', maxHeight: 'calc(100dvh - ' + PT + ' - 6rem)' })}>
               {searching && <p className="text-white text-center py-4 animate-pulse text-xl">Searching...</p>}
@@ -645,7 +669,7 @@ function App() {
                             <button onClick={() => openWatchlistDrawer(w)} className="text-left w-full">
                               <h3 className="font-semibold text-2xl text-white underline decoration-dotted truncate">{w.name}</h3>
                             </button>
-                            {meta && (meta.team || meta.position) && <p className="text-xl text-gray-300">{[meta.team, meta.position].filter(Boolean).join(' \u2022 ')}</p>}
+                            {meta && (meta.team || meta.position) && <p className="text-xl text-gray-300">{[meta.team, meta.position].filter(Boolean).join(' • ')}</p>}
                             {meta && meta.league && <p className="text-base text-white/60 uppercase">{meta.league}</p>}
                             <div className="flex items-center gap-1 mt-1"><CheckIcon /><span className="text-xl text-green-300">Watching</span></div>
                           </div>
@@ -720,8 +744,8 @@ function App() {
           <div className="space-y-4 pb-8" style={{ paddingTop: '1rem' }}>
             <div className={cardClass} style={cardStyle}>
               <div className="mb-3 pb-2 border-b border-white/15 text-center">
-                <h2 className="text-4xl font-black text-white tracking-wide">About</h2>
-                <h2 className="text-4xl font-black text-white tracking-wide">{APP_NAME}</h2>
+                <h2 className="text-4xl font-black text-white" style={{ fontFamily: 'var(--pw-display-font)', letterSpacing: '0.06em', textTransform: 'uppercase', WebkitTextStroke: '1px #fff' }}>About</h2>
+                <h2 className="text-4xl font-black text-white" style={{ fontFamily: 'var(--pw-display-font)', letterSpacing: '0.06em', textTransform: 'uppercase', WebkitTextStroke: '1px #fff' }}>{APP_NAME}</h2>
               </div>
               <p className="text-white/80 italic text-xl text-center mb-3">v{APP_VERSION}</p>
               <div className="flex items-center gap-4 mb-4">
@@ -740,7 +764,7 @@ function App() {
               </div>
             </div>
             <div className={cardClass} style={cardStyle}>
-              <h3 className="text-white text-2xl font-bold mb-4 text-center">How it works</h3>
+              <h3 className="text-white text-2xl font-bold mb-4 text-center" style={{ fontFamily: 'var(--pw-display-font)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>How it works</h3>
               <div className="space-y-4">
                 <div className="flex gap-3 items-start"><span className="text-white text-2xl font-black w-7 shrink-0">1.</span><p className="text-gray-100 text-xl">Search for a player. We pull their bio from Wikipedia and stats from ESPN.</p></div>
                 <div className="flex gap-3 items-start"><span className="text-white text-2xl font-black w-7 shrink-0">2.</span><p className="text-gray-100 text-xl">Save them with one tap. We capture their stats right away to your My Players page.</p></div>
@@ -749,7 +773,7 @@ function App() {
               </div>
             </div>
             <div className={cardClass} style={cardStyle}>
-              <h3 className="font-bold text-white mb-1 text-2xl">Privacy</h3>
+              <h3 className="font-bold text-white mb-1 text-2xl" style={{ fontFamily: 'var(--pw-display-font)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>Privacy</h3>
               <p className="text-white/60 text-xl mb-3">Last updated: April 2026</p>
               <div className="space-y-3 text-gray-100 text-xl leading-relaxed">
                 <p><strong className="text-white">We collect:</strong> your email, watchlist, and search activity.</p>
@@ -820,7 +844,7 @@ function App() {
                   {p.headshot ? <img src={p.headshot} alt={p.displayName} className="w-12 h-12 rounded-full object-cover border border-white/20 shrink-0" /> : <div className="w-12 h-12 rounded-full bg-black/40 flex items-center justify-center shrink-0 text-lg text-white">?</div>}
                   <div className="flex-1 min-w-0">
                     <p className="text-white text-2xl font-bold truncate">{p.displayName}</p>
-                    <p className="text-white/70 text-xl truncate">{[p.team, p.position].filter(Boolean).join(' \u2022 ')}</p>
+                    <p className="text-white/70 text-xl truncate">{[p.team, p.position].filter(Boolean).join(' • ')}</p>
                     {p.league && <p className="text-white/50 text-base uppercase">{p.league}</p>}
                   </div>
                 </div>
