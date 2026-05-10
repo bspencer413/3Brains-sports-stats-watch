@@ -59,7 +59,7 @@ const { useState, useEffect } = React;
 
 /* SKIN BLOCK -- mirrors what reskinner v0.3 will produce. */
 const APP_NAME = 'Player Watch';
-const APP_VERSION = '1.0.24';
+const APP_VERSION = '1.0.25';
 const API_BASE = 'https://playerwatch-backend.onrender.com';
 const PW_REPO = 'https://raw.githubusercontent.com/bspencer413/3Brains-sports-stats-watch/main';
 const SIGNIN_BG = PW_REPO + '/signin-background.jpg';
@@ -475,13 +475,13 @@ function App() {
     setDrawerData(prev => prev ? Object.assign({}, prev, { wiki: wiki, loading: false }) : null);
   };
 
-  // My Players drawer (full): hero + Wiki bio + StatPanel from snapshot (or live fallback)
+  // My Players drawer (full): hero + Wiki bio + StatPanel. Re-fetches fresh ESPN data on every tap.
   const openMyPlayersDrawer = async (wItem) => {
     const meta = parseMeta(wItem.location);
     let snapshot = getStatSnapshot(wItem.id);
     setDrawerData({ mode: 'myplayers', name: wItem.name, watchlistId: wItem.id, meta: meta, wiki: null, snapshot: snapshot, loading: true });
     const wiki = await fetchWikiBio(wItem.name).catch(() => null);
-    if (!snapshot && meta && meta.sport && meta.league && meta.espnId) {
+    if (meta && meta.sport && meta.league && meta.espnId) {
       const overview = await fetchEspnOverview(meta.sport, meta.league, meta.espnId).catch(() => null);
       const snap = buildSnapshot(overview);
       if (snap) { saveStatSnapshot(wItem.id, snap); snapshot = snap; }
