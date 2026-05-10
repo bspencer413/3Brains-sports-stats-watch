@@ -59,7 +59,7 @@ const { useState, useEffect } = React;
 
 /* SKIN BLOCK -- mirrors what reskinner v0.3 will produce. */
 const APP_NAME = 'Player Watch';
-const APP_VERSION = '1.0.27';
+const APP_VERSION = '1.0.25';
 const API_BASE = 'https://playerwatch-backend.onrender.com';
 const PW_REPO = 'https://raw.githubusercontent.com/bspencer413/3Brains-sports-stats-watch/main';
 const SIGNIN_BG = PW_REPO + '/signin-background.jpg';
@@ -412,8 +412,7 @@ function App() {
     finally { setSearching(false); }
   };
 
-  // SAVE: POST to watchlist, reload list, navigate to Watchlist tab.
-  // No ESPN fetch, no snapshot. User upgrades to My Players via the Check button on the Watchlist drawer.
+  // SAVE: POST → fetch ESPN overview → store snapshot → navigate → auto-open My Players drawer
   const savePlayer = async () => {
     if (!selectedPlayer && !(searchResults && searchResults.queryName)) return;
     const playerName = selectedPlayer ? selectedPlayer.displayName : (searchResults && searchResults.queryName);
@@ -431,8 +430,29 @@ function App() {
         body: JSON.stringify({ name: playerName, location: meta, dob: '' })
       });
       if (!r.ok) throw new Error('Failed');
+      var newId = null;
+      try { const created = await r.json(); newId = created.id || null; } catch(e) {}
+      if (selectedPlayer && selectedPlayer.sport && selectedPlayer.league && selectedPlayer.id) {
+        const overview = await fetchEspnOverview(selectedPlayer.sport, selectedPlayer.league, selectedPlayer.id).catch(() => null);
+        const snap = buildSnapshot(overview);
+        if (snap && newId) saveStatSnapshot(newId, snap);
+      }
       await loadWatchlist();
-      clearSearch(); setPage('watchlist');
+      if (!newId) {
+        // Find newest matching by name from the just-loaded list
+        const fresh = (await (await fetch(API_BASE + '/watchlist', { headers: { 'Authorization': 'Bearer ' + token } })).json()).find(w => w.name && w.name.trim().toLowerCase() === playerName.trim().toLowerCase());
+        if (fresh) {
+          newId = fresh.id;
+          // Also save snapshot under correct id if we missed earlier
+          if (selectedPlayer && selectedPlayer.sport && selectedPlayer.league && selectedPlayer.id) {
+            const overview2 = await fetchEspnOverview(selectedPlayer.sport, selectedPlayer.league, selectedPlayer.id).catch(() => null);
+            const snap2 = buildSnapshot(overview2);
+            if (snap2) saveStatSnapshot(newId, snap2);
+          }
+        }
+      }
+      clearSearch(); setPage('myplayers');
+      if (newId) setAutoOpenId(newId);
     } catch(e) { alert('Error: ' + e.message); }
     finally { setLoadingSave(false); }
   };
@@ -517,7 +537,7 @@ function App() {
           {wiki && wiki.extract && <p className="text-gray-100 text-xl leading-relaxed mb-3">{wiki.extract}</p>}
           {showSaveButton && (
             <div className="space-y-2">
-              {alreadySaved ? <p className="text-green-300 text-xl text-center font-bold">Already saved</p> : <button onClick={savePlayer} disabled={loadingSave || !espnPlayer} className="w-full py-4 text-white rounded-xl font-bold text-2xl flex items-center justify-center gap-2 disabled:opacity-50" style={{ backgroundColor: 'var(--pw-accent)' }}><PlusIcon /> {loadingSave ? 'Saving...' : 'Save to Watchlist'}</button>}
+              {alreadySaved ? <p className="text-green-300 text-xl text-center font-bold">Already saved</p> : <button onClick={savePlayer} disabled={loadingSave || !espnPlayer} className="w-full py-4 text-white rounded-xl font-bold text-2xl flex items-center justify-center gap-2 disabled:opacity-50" style={{ backgroundColor: 'var(--pw-accent)' }}><PlusIcon /> {loadingSave ? 'Saving...' : 'Save Player'}</button>}
               {!espnPlayer && <p className="text-yellow-300 text-base text-center">Pick a sport/league above to enable Save.</p>}
               <button onClick={clearSearch} className="w-full py-3 bg-white/10 border border-white/20 text-white/80 rounded-xl text-xl text-center">Clear Search</button>
             </div>
@@ -559,7 +579,7 @@ function App() {
                 {wiki && wiki.extract && <p className="text-gray-100 text-xl leading-relaxed mb-3">{wiki.extract}</p>}
                 {mode === 'watchlist' && (
                   <button onClick={checkForNewStats} disabled={checkingStats} className="w-full py-4 text-white rounded-xl font-bold text-2xl flex items-center justify-center gap-2 disabled:opacity-50 mt-2" style={{ backgroundColor: 'var(--pw-accent)' }}>
-                    <RefreshIcon /> {checkingStats ? 'Saving...' : 'Save to My Players'}
+                    <RefreshIcon /> {checkingStats ? 'Checking...' : 'Check for new stats'}
                   </button>
                 )}
                 {mode === 'myplayers' && <StatPanel overview={overview} />}
@@ -668,10 +688,10 @@ function App() {
           <div className="space-y-3" style={{ paddingTop: '1rem' }}>
             <div className={cardClass} style={cardStyle}>
               <CardPageHeader title="My Players" subtitle="Your saved players and stats" />
-              {watchlist.filter(w => getStatSnapshot(w.id)).length === 0 ? (<div className="text-center py-6"><p className="text-gray-200 text-xl leading-relaxed">Tap a Watchlist player and Save to My Players to see them here.</p></div>) : (
+              {watchlist.length === 0 ? (<div className="text-center py-6"><p className="text-gray-200 text-xl leading-relaxed">Search for a player and save them here.</p></div>) : (
                 <div className="space-y-3">
                   <p className="text-gray-300 text-lg text-center mb-1">Tap a name to see latest stats</p>
-                  {watchlist.filter(w => getStatSnapshot(w.id)).map(w => {
+                  {watchlist.map(w => {
                     const meta = parseMeta(w.location);
                     return (
                       <div key={w.id} className="p-4 bg-black/50 rounded-lg border border-white/15">
