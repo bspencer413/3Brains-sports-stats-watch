@@ -3,56 +3,57 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <meta name="theme-color" content="#0033A0">
+  <meta name="theme-color" content="#0a1525">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="Player Watch">
+  <meta name="apple-mobile-web-app-title" content="Stakes Watch">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="icon" type="image/png" href="/apple-touch-icon.png">
-  <title>Player Watch</title>
-  <meta name="description" content="Player Watch -- Track your favorite athletes. Add any player to your watchlist. Get notified on trades, injuries, retirements, and milestones across NFL, NBA, MLB, NHL, and MLS.">
-  <meta name="keywords" content="player watch, fantasy sports, NFL, NBA, MLB, NHL, MLS, player tracker, injury alerts, trade alerts, sports stats">
+  <title>Stakes Watch</title>
+  <meta name="description" content="Stakes Watch -- Track prediction markets. Add any Kalshi market to your watchlist. Get notified on price moves, resolutions, and time-to-close.">
+  <meta name="keywords" content="stakes watch, prediction markets, kalshi, event contracts, price alerts, market watch">
   <meta name="robots" content="index, follow">
-  <meta name="author" content="Player Watch">
-  <link rel="canonical" href="https://playerwatch.app">
-  <meta property="og:title" content="Player Watch -- Track Your Athletes.">
-  <meta property="og:description" content="Add any player to your watchlist. Get notified on trades, injuries, and milestones.">
-  <meta property="og:url" content="https://playerwatch.app">
+  <meta name="author" content="Stakes Watch">
+  <link rel="canonical" href="https://stakeswatch.app">
+  <meta property="og:title" content="Stakes Watch -- Track Prediction Markets.">
+  <meta property="og:description" content="What stakes are you watching? Add any Kalshi market and get notified when the price moves.">
+  <meta property="og:url" content="https://stakeswatch.app">
   <meta property="og:type" content="website">
-  <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjogIlBsYXllciBXYXRjaCIsICJzaG9ydF9uYW1lIjogIlBXIiwgInN0YXJ0X3VybCI6ICIvIiwgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsICJiYWNrZ3JvdW5kX2NvbG9yIjogIiMxMjA1MjAiLCAidGhlbWVfY29sb3IiOiAiIzAwMzNBMCJ9">
+  <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjogIlN0YWtlcyBXYXRjaCIsICJzaG9ydF9uYW1lIjogIlNXIiwgInN0YXJ0X3VybCI6ICIvIiwgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsICJiYWNrZ3JvdW5kX2NvbG9yIjogIiMwYTE1MjUiLCAidGhlbWVfY29sb3IiOiAiIzBhMTUyNSJ9">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Graduate&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <style>
     /* SKIN CSS VARS -- reskinner v0.3 will target these */
     :root {
-      --pw-accent: #0033A0;
-      --pw-accent-2: #E4002B;
-      --pw-bg-gradient: linear-gradient(90deg, #E4002B 0%, #6B1F6B 50%, #0033A0 100%);
-      --pw-bg-overlay: rgba(0,0,0,0.20);
-      --pw-signin-blur: blur(2px);
-      --pw-card-bg: rgba(0,0,0,0.55);
-      --pw-card-border: rgba(255,255,255,0.15);
-      --pw-drawer-bg: #0a0a1e;
-      --pw-display-font: 'Graduate', Georgia, serif;
+      --sw-accent: #00d4b8;
+      --sw-accent-2: #ef4444;
+      --sw-bg-gradient: linear-gradient(135deg, #0d3a3a 0%, #0a1525 50%, #0a1f4a 100%);
+      --sw-bg-overlay: rgba(0,0,0,0.20);
+      --sw-signin-blur: blur(0px);
+      --sw-card-bg: rgba(10,21,37,0.65);
+      --sw-card-border: rgba(255,255,255,0.12);
+      --sw-drawer-bg: #0a1525;
+      --sw-display-font: 'Oswald', 'Arial Narrow', Arial, sans-serif;
     }
-    * { -webkit-tap-highlight-color: transparent; font-family: Georgia, 'Times New Roman', serif; }
+    * { -webkit-tap-highlight-color: transparent; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
     html, body { height: 100%; overflow-x: hidden; }
     @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
     .modal-drawer {
       position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
-      background: var(--pw-drawer-bg); border-radius: 20px 20px 0 0;
-      border-top: 1px solid var(--pw-card-border);
+      background: var(--sw-drawer-bg); border-radius: 20px 20px 0 0;
+      border-top: 1px solid var(--sw-card-border);
       max-height: 85vh; overflow-y: auto;
       transform: translateY(0); transition: transform 0.3s ease;
       padding-bottom: max(1rem, env(safe-area-inset-bottom));
     }
     .modal-overlay { position: fixed; inset: 0; z-index: 99; background: rgba(0,0,0,0.6); }
   </style>
+  <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body style="margin:0;padding:0;">
 <div id="root"></div>
@@ -60,14 +61,15 @@
 const { useState, useEffect } = React;
 
 /* SKIN BLOCK -- mirrors what reskinner v0.3 will produce. */
-const APP_NAME = 'Player Watch';
-const APP_VERSION = '1.0.30';
-const API_BASE = 'https://playerwatch-backend.onrender.com';
-const PW_REPO = 'https://raw.githubusercontent.com/bspencer413/3Brains-sports-stats-watch/main';
-const SIGNIN_BG = PW_REPO + '/signin-background.jpg';
+const APP_NAME = 'Stakes Watch';
+const APP_VERSION = '0.3.8';
+const API_BASE = 'https://stakes-watch-backend.onrender.com';
+const SW_REPO = 'https://raw.githubusercontent.com/bspencer413/stakes-watch-frontend/main';
+const SIGNIN_BG = SW_REPO + '/sw-bg.jpg';
 const BILL_PHOTO = 'https://raw.githubusercontent.com/bspencer413/memorial-watch/main/Bill.jpeg';
-const TAGLINE = 'Who are you watching?';
-const TAGLINE_SUB = 'Track players across all major sports';
+const TAGLINE = 'What stakes are you watching?';
+const TAGLINE_SUB = 'Track prediction markets on Kalshi';
+const DEFAULT_THRESHOLD = 10;
 
 const isPhone = window.innerWidth < 500;
 const isTablet = window.innerWidth >= 500 && window.innerWidth < 1024;
@@ -133,18 +135,18 @@ const AUTH_GATE_CONFIG = {
   apiBase: API_BASE,
   tokenKey: 'token',
   userKey: 'user',
-  anonStorageKey: 'pw_anon_watchlist',
-  anonSnapshotPrefix: 'pw_stats_',
+  anonStorageKey: 'sw_anon_watchlist',
+  anonSnapshotPrefix: 'sw_market_',
   watchlistEndpoint: '/watchlist',
   loginEndpoint: '/auth/login',
   registerEndpoint: '/auth/register',
   freeAnonLimit: 5,
-  appName: 'Player Watch',
-  saveActionLabel: 'save this player',
-  itemNoun: 'players',
-  upgradeBenefit: 'unlimited saves and 12-hour player-news alerts',
-  accentColor: 'var(--pw-accent)',
-  modalBg: 'rgba(10,15,30,0.80)',
+  appName: 'Stakes Watch',
+  saveActionLabel: 'save this market',
+  itemNoun: 'markets',
+  upgradeBenefit: 'unlimited saves and 12-hour price-move alerts',
+  accentColor: 'var(--sw-accent)',
+  modalBg: 'rgba(10,21,37,0.80)',
   modalBackdropImage: SIGNIN_BG,
   stayLoggedInDefault: true
 };
@@ -662,133 +664,176 @@ function useAuthGate(config) {
 // === END AuthGate v0.3.3 ======================================================
 
 
-// Helpers
-const toTitleCase = (s) => s ? s.replace(/\w\S*/g, t => t.charAt(0).toUpperCase() + t.substr(1).toLowerCase()).replace(/'\w/g, t => t.toUpperCase()) : s;
-const smartTitleCase = (s) => s ? s.trim().replace(/\s+/g, ' ').split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') : s;
+// ── Helpers ──────────────────────────────────────────────────────────────────
+const smartTitleCase = (s) => s ? s.trim().replace(/\s+/g, ' ') : s;
 
-// Local stat snapshot store (overwrite on each check)
-const SNAPSHOT_KEY = (id) => 'pw_stats_' + id;
-const saveStatSnapshot = (id, snap) => { if (!id || !snap) return; try { localStorage.setItem(SNAPSHOT_KEY(id), JSON.stringify(snap)); } catch(e) {} };
-const getStatSnapshot = (id) => { if (!id) return null; try { const raw = localStorage.getItem(SNAPSHOT_KEY(id)); return raw ? JSON.parse(raw) : null; } catch(e) { return null; } };
-const deleteStatSnapshot = (id) => { if (!id) return; try { localStorage.removeItem(SNAPSHOT_KEY(id)); } catch(e) {} };
-const buildSnapshot = (overview) => {
-  if (!overview) return null;
-  // Backend returns { athlete, overview, bio, stats, gamelog }
-  // ESPN's /athletes/{id} response wraps everything under another "athlete" key,
-  // so the actual fields live at overview.athlete.athlete.* and overview.athlete.team etc.
-  const athleteRoot = overview.athlete || {};
-  const ath = athleteRoot.athlete || athleteRoot;
-  const ov = overview.overview || {};
-  const st = overview.stats || {};
-  const flat = {
-    displayName: ath.displayName || ath.fullName || '',
-    team: athleteRoot.team || ath.team || (ov.athlete && ov.athlete.team) || null,
-    position: athleteRoot.position || ath.position || (ov.athlete && ov.athlete.position) || null,
-    status: athleteRoot.status || ath.status || (ov.athlete && ov.athlete.status) || null,
-    news: ov.news || athleteRoot.news || ath.news || [],
-    nextEvent: ov.nextEvent || athleteRoot.nextEvent || ath.nextEvent || [],
-    statistics: st || ov.statistics || athleteRoot.statistics || null,
-    injuries: athleteRoot.injuries || ath.injuries || (ov.athlete && ov.athlete.injuries) || [],
-  };
-  const status = flat.status || {};
-  const statusText = (status.type && (status.type.description || status.type.name)) || status.name || '';
-  const news0 = flat.news && flat.news.length > 0 ? flat.news[0] : null;
-  const next0 = flat.nextEvent && flat.nextEvent.length > 0 ? flat.nextEvent[0] : null;
-  const inj0 = flat.injuries && flat.injuries.length > 0 ? flat.injuries[0] : null;
+const fmtPrice = (cents) => {
+  if (cents === null || cents === undefined || cents === '') return '—';
+  return cents + '¢';
+};
+
+const fmtPctChange = (oldP, newP) => {
+  if (!oldP || !newP || oldP === newP) return '';
+  const delta = newP - oldP;
+  const pct = (delta / oldP) * 100;
+  const sign = delta > 0 ? '+' : '';
+  return sign + pct.toFixed(1) + '%';
+};
+
+const fmtCountdown = (closeTimeStr) => {
+  if (!closeTimeStr) return '';
+  try {
+    const close = new Date(closeTimeStr);
+    const now = new Date();
+    const diffMs = close - now;
+    if (diffMs <= 0) return 'Closed';
+    const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const mins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+    if (days > 0) return days + 'd ' + hours + 'h';
+    if (hours > 0) return hours + 'h ' + mins + 'm';
+    return mins + 'm';
+  } catch(e) { return ''; }
+};
+
+const fmtVolume = (v) => {
+  if (v === null || v === undefined || v === '') return '—';
+  const n = Number(v);
+  if (isNaN(n)) return '—';
+  if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
+  if (n >= 1000) return (n / 1000).toFixed(1) + 'k';
+  return String(n);
+};
+
+const fmtPriceDelta = (current, previous) => {
+  if (current === null || current === undefined || previous === null || previous === undefined) return null;
+  if (current === previous) return null;
+  const diff = current - previous;
+  const arrow = diff > 0 ? '▲' : '▼';
+  return arrow + Math.abs(diff) + '¢';
+};
+
+const fmtClockTime = (d) => {
+  try {
+    const dt = d || new Date();
+    return dt.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+  } catch(e) { return ''; }
+};
+
+// Prefer event-level title as the main heading — it's the actual question
+// ("Will OpenAI IPO?"). Market.title is sometimes just the answer slug
+// ("Before 2030") for multi-option events, which is meaningless on its own.
+const marketHeading = (m) => {
+  if (!m) return '';
+  const evt = (m.event_title || '').trim();
+  const t = (m.title || m.subtitle || m.ticker || '').trim();
+  return evt || t || '';
+};
+
+// The market's specific option/answer, shown alongside the heading when distinct.
+// Returns empty string when event_title and market title carry the same content.
+const marketDetail = (m) => {
+  if (!m) return '';
+  const evt = (m.event_title || '').trim();
+  const t = (m.title || m.subtitle || '').trim();
+  if (evt && t && evt !== t) return t;
+  return '';
+};
+
+// Local price snapshot store
+const SNAPSHOT_KEY = (id) => 'sw_market_' + id;
+const saveSnapshot = (id, snap) => { if (!id || !snap) return; try { localStorage.setItem(SNAPSHOT_KEY(id), JSON.stringify(snap)); } catch(e) {} };
+const getSnapshot = (id) => { if (!id) return null; try { const raw = localStorage.getItem(SNAPSHOT_KEY(id)); return raw ? JSON.parse(raw) : null; } catch(e) { return null; } };
+const deleteSnapshotLocal = (id) => { if (!id) return; try { localStorage.removeItem(SNAPSHOT_KEY(id)); } catch(e) {} };
+
+const buildSnapshot = (market) => {
+  if (!market) return null;
   return {
-    overview: flat,
-    statusText: statusText,
-    newsHeadline: news0 ? (news0.headline || news0.description || '') : '',
-    newsPublished: news0 ? (news0.published || '') : '',
-    nextEventDate: next0 ? (next0.date || '') : '',
-    injuryHeadline: inj0 ? (inj0.shortComment || inj0.longComment || inj0.description || '') : '',
-    injuryStatus: inj0 ? (inj0.status || (inj0.type && inj0.type.description) || '') : '',
+    ticker: market.ticker,
+    title: market.title || market.subtitle || '',
+    last_price: market.last_price,
+    yes_bid: market.yes_bid,
+    yes_ask: market.yes_ask,
+    no_bid: market.no_bid,
+    no_ask: market.no_ask,
+    volume_24h: market.volume_24h,
+    status: market.status,
+    result: market.result || '',
+    close_time: market.close_time,
+    category: market.category || '',
     capturedAt: Date.now()
   };
 };
-const snapshotChanged = (oldSnap, newSnap) => {
+
+const snapshotChanged = (oldSnap, newSnap, thresholdPct) => {
   if (!oldSnap || !newSnap) return true;
-  if (oldSnap.statusText !== newSnap.statusText) return true;
-  if (oldSnap.newsHeadline !== newSnap.newsHeadline) return true;
-  if (oldSnap.newsPublished !== newSnap.newsPublished) return true;
-  if (oldSnap.nextEventDate !== newSnap.nextEventDate) return true;
+  if ((oldSnap.result || '') !== (newSnap.result || '') && newSnap.result) return true;
+  if ((oldSnap.status || '') !== (newSnap.status || '')) return true;
+  const oldP = oldSnap.last_price;
+  const newP = newSnap.last_price;
+  if (typeof oldP === 'number' && typeof newP === 'number' && oldP > 0) {
+    const pct = Math.abs((newP - oldP) / oldP) * 100;
+    if (pct >= (thresholdPct || DEFAULT_THRESHOLD)) return true;
+  }
   return false;
 };
 
-// ESPN (via Player Watch backend proxy — bypasses browser CORS)
-const LEAGUE_TO_SPORT = {
-  nfl: 'football', ncaaf: 'football',
-  nba: 'basketball', wnba: 'basketball', ncaab: 'basketball', ncaam: 'basketball', ncaaw: 'basketball',
-  mlb: 'baseball',
-  nhl: 'hockey',
-  mls: 'soccer', 'eng.1': 'soccer', 'esp.1': 'soccer', 'ita.1': 'soccer', 'ger.1': 'soccer', 'fra.1': 'soccer'
-};
-const fetchEspnPlayers = async (name) => {
+// Kalshi (via Stakes Watch backend proxy — bypasses browser CORS)
+const fetchKalshiSearch = async (query) => {
   try {
-    const url = API_BASE + '/espn/search?name=' + encodeURIComponent(name) + '&limit=10';
+    const url = API_BASE + '/kalshi/search?q=' + encodeURIComponent(query || '') + '&limit=50';
     const r = await fetch(url);
     if (!r.ok) return [];
     const data = await r.json();
-    const groups = (data && data.results) || [];
-    var athletes = [];
-    for (var i = 0; i < groups.length; i++) {
-      var g = groups[i];
-      if (g.type === 'player' || g.type === 'athlete') athletes = athletes.concat(g.contents || []);
-    }
-    return athletes.map(function(a) {
-      // ESPN encodes league AND athlete ID in the link URL (e.g. /mlb/player/_/id/33192/...)
-      var href = (a.link && a.link.web && a.link.web.href) || (a.links && a.links[0] && a.links[0].href) || '';
-      var leagueMatch = href.match(/espn\.com\/([a-z0-9.]+)\/(?:player|athlete)/i);
-      var league = leagueMatch ? leagueMatch[1].toLowerCase() : (a.defaultLeagueSlug || a.league || '');
-      var sport = LEAGUE_TO_SPORT[league] || a.defaultSportSlug || a.sport || '';
-      // Extract integer athlete ID — ESPN's uid format is "s:20~l:28~a:3139477"
-      // a.id is a GUID and won't work for athlete endpoints
-      var athleteId = '';
-      if (a.uid) {
-        var uidMatch = a.uid.match(/~a:(\d+)/);
-        if (uidMatch) athleteId = uidMatch[1];
-      }
-      if (!athleteId) {
-        var idMatch = href.match(/\/id\/(\d+)/);
-        if (idMatch) athleteId = idMatch[1];
-      }
-      return {
-        id: athleteId,
-        displayName: a.displayName || (a.athlete && a.athlete.displayName) || a.name || '',
-        sport: sport,
-        league: league,
-        team: (a.team && a.team.displayName) || (a.subtitle) || '',
-        position: (a.position && a.position.displayName) || (a.athlete && a.athlete.position && a.athlete.position.displayName) || '',
-        headshot: (a.image && a.image.default) || (a.image && a.image.url) || (a.athlete && a.athlete.headshot && a.athlete.headshot.href) || '',
-        raw: a
-      };
-    });
+    return (data && data.results) || [];
   } catch(e) { return []; }
 };
-const fetchEspnOverview = async (sport, league, id) => {
-  if (!sport || !league || !id) return null;
+
+const fetchKalshiMarket = async (ticker) => {
+  if (!ticker) return null;
   try {
-    const url = API_BASE + '/espn/overview?sport=' + encodeURIComponent(sport) + '&league=' + encodeURIComponent(league) + '&id=' + encodeURIComponent(id);
+    const url = API_BASE + '/kalshi/market/' + encodeURIComponent(ticker);
     const r = await fetch(url);
     if (!r.ok) return null;
     return await r.json();
   } catch(e) { return null; }
 };
 
-// Wikipedia
-const fetchWikiBio = async (name) => {
+const fetchKalshiFeatured = async (limit) => {
   try {
-    const sum = await (await fetch('https://en.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(name))).json();
-    if (!sum || sum.type === 'no-extract' || !sum.title) return null;
-    return { title: sum.title, thumbnail: sum.thumbnail ? sum.thumbnail.source : null, extract: sum.extract || '', description: sum.description || '' };
-  } catch(e) { return null; }
+    const url = API_BASE + '/kalshi/featured?limit=' + (limit || 10);
+    const r = await fetch(url);
+    if (!r.ok) return [];
+    const data = await r.json();
+    return (data && data.results) || [];
+  } catch(e) { return []; }
 };
 
-// Icons
+const fetchKalshiCategories = async () => {
+  try {
+    const r = await fetch(API_BASE + '/kalshi/categories');
+    if (!r.ok) return [];
+    const data = await r.json();
+    return (data && data.categories) || [];
+  } catch(e) { return []; }
+};
+
+const fetchKalshiMarketsByCategory = async (cat, limit) => {
+  try {
+    const url = API_BASE + '/kalshi/markets-by-category?cat=' + encodeURIComponent(cat || '') + '&limit=' + (limit || 30);
+    const r = await fetch(url);
+    if (!r.ok) return [];
+    const data = await r.json();
+    return (data && data.results) || [];
+  } catch(e) { return []; }
+};
+
+// ── Icons ────────────────────────────────────────────────────────────────────
 const SearchIcon = () => (<svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>);
 const HeartIcon = () => (<svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>);
 const InfoIcon = () => (<svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>);
-const BellIcon = ({ red }) => (<svg className="w-7 h-7" fill="none" stroke={red ? 'var(--pw-accent-2)' : 'currentColor'} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>);
+const BellIcon = ({ red }) => (<svg className="w-7 h-7" fill="none" stroke={red ? 'var(--sw-accent-2)' : 'currentColor'} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>);
+const ChartIcon = () => (<svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>);
 const PlusIcon = () => (<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>);
 const TrashIcon = () => (<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>);
 const CheckIcon = () => (<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>);
@@ -798,89 +843,114 @@ const EyeOffIcon = () => (<svg className="w-5 h-5" fill="none" stroke="currentCo
 
 const ClearableInput = ({ value, onChange, onBlur, onKeyPress, placeholder, type='text', maxLength, inputClass }) => (
   <div className="relative">
-    <input type={type} name="player-search" inputMode="search" placeholder={placeholder} value={value} onChange={onChange} onBlur={onBlur} onKeyPress={onKeyPress} maxLength={maxLength} className={inputClass + ' pr-10'} autoCorrect="off" autoCapitalize="words" autoComplete="off" spellCheck="false" />
+    <input type={type} name="market-search" inputMode="search" placeholder={placeholder} value={value} onChange={onChange} onBlur={onBlur} onKeyPress={onKeyPress} maxLength={maxLength} className={inputClass + ' pr-10'} autoCorrect="off" autoCapitalize="none" autoComplete="off" spellCheck="false" />
     {value && value.length > 0 && (<button onClick={() => onChange({ target: { value: '' } })} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white text-xl font-bold leading-none" type="button">X</button>)}
   </div>
 );
 
 const CardPageHeader = ({ title, subtitle }) => (
   <div className="mb-3 pb-2 border-b border-white/15 text-center">
-    <h2 className="text-4xl font-black text-white" style={{ fontFamily: 'var(--pw-display-font)', letterSpacing: '0.06em', textTransform: 'uppercase', WebkitTextStroke: '1px #fff' }}>{title}</h2>
+    <h2 className="text-4xl font-bold text-white" style={{ fontFamily: 'var(--sw-display-font)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>{title}</h2>
     {subtitle && <p className="text-gray-200 text-xl mt-1">{subtitle}</p>}
   </div>
 );
 
 const PageWrapper = ({ children }) => (
-  <div style={{ minHeight: '100dvh', width: '100%', position: 'relative', paddingTop: 'env(safe-area-inset-top)', paddingBottom: '5rem', backgroundImage: 'var(--pw-bg-gradient)', backgroundSize: 'cover', backgroundAttachment: 'scroll' }}>
-    <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'var(--pw-bg-overlay)' }} />
+  <div style={{ minHeight: '100dvh', width: '100%', position: 'relative', paddingTop: 'env(safe-area-inset-top)', paddingBottom: '5rem', backgroundColor: '#0a1525' }}>
+    <div style={{ position: 'absolute', inset: 0, backgroundImage: 'url(' + SIGNIN_BG + ')', backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat', backgroundAttachment: 'fixed', filter: 'blur(8px) brightness(0.7)', zIndex: 0 }} />
+    <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(10,21,37,0.30)', zIndex: 1 }} />
     <div style={{ position: 'relative', zIndex: 10 }}>{children}</div>
   </div>
 );
 
-const StatPanel = ({ overview }) => {
-  if (!overview) return <p className="text-gray-300 text-xl text-center py-3">No stats available right now.</p>;
-  const status = overview.status || (overview.athlete && overview.athlete.status) || {};
-  const statusText = (status.type && (status.type.description || status.type.name)) || status.name || '';
-  const team = (overview.team && overview.team.displayName) || (overview.athlete && overview.athlete.team && overview.athlete.team.displayName) || '';
-  const position = (overview.position && overview.position.displayName) || (overview.athlete && overview.athlete.position && overview.athlete.position.displayName) || '';
-  const news = (overview.news && overview.news.length > 0 && overview.news[0]) || null;
-  const nextEvent = (overview.nextEvent && overview.nextEvent.length > 0 && overview.nextEvent[0]) || null;
-  const stats = (overview.statistics && (overview.statistics.categories || (overview.statistics.splits && overview.statistics.splits.categories))) || [];
-  const injury = (overview.injuries && overview.injuries.length > 0 && overview.injuries[0]) || null;
-  const statusLower = (statusText || '').toLowerCase();
-  var badgeColor = 'bg-green-700';
-  if (statusLower.indexOf('out') >= 0 || statusLower.indexOf('injured') >= 0 || statusLower.indexOf('ir') >= 0) badgeColor = 'bg-red-700';
-  else if (statusLower.indexOf('quest') >= 0 || statusLower.indexOf('doubt') >= 0) badgeColor = 'bg-yellow-600';
-  else if (statusLower.indexOf('retired') >= 0) badgeColor = 'bg-gray-700';
+// MarketPanel — full market detail (My Markets drawer mode)
+const MarketPanel = ({ market, savedSnap, thresholdPct }) => {
+  if (!market) return <p className="text-gray-300 text-xl text-center py-3">No market data available right now.</p>;
+
+  const status = (market.status || '').toLowerCase();
+  const result = (market.result || '').toLowerCase();
+  const last = market.last_price;
+  const savedLast = savedSnap ? savedSnap.last_price : null;
+  const noPrice = (last !== null && last !== undefined) ? (100 - last) : null;
+
+  // Status badge color
+  var badgeColor = 'bg-emerald-700';
+  var badgeText = 'OPEN';
+  if (result === 'yes') { badgeColor = 'bg-emerald-700'; badgeText = 'RESOLVED YES'; }
+  else if (result === 'no') { badgeColor = 'bg-red-700'; badgeText = 'RESOLVED NO'; }
+  else if (status === 'closed' || status === 'settled' || status === 'determined' || status === 'finalized') { badgeColor = 'bg-slate-600'; badgeText = 'CLOSED'; }
+
+  // Price delta vs saved
+  var deltaText = '';
+  var deltaColor = 'text-gray-300';
+  if (typeof last === 'number' && typeof savedLast === 'number' && last !== savedLast) {
+    const delta = last - savedLast;
+    const pct = (delta / savedLast) * 100;
+    deltaText = (delta > 0 ? '+' : '') + delta + '¢ (' + (delta > 0 ? '+' : '') + pct.toFixed(1) + '%)';
+    deltaColor = delta > 0 ? 'text-emerald-400' : 'text-red-400';
+  }
+
+  const countdown = fmtCountdown(market.close_time);
+
   return (
     <div className="space-y-3">
-      {statusText && (<div className={'px-4 py-2 rounded-xl text-center ' + badgeColor}><p className="text-white font-black text-2xl">{statusText.toUpperCase()}</p></div>)}
-      {injury && (injury.longComment || injury.shortComment || injury.description) && (
-        <div className="bg-red-950/40 border border-red-700/40 rounded-xl p-3">
-          <p className="text-red-300 text-sm font-bold mb-1">Injury Report{injury.status ? ' — ' + injury.status : ''}</p>
-          <p className="text-white text-base leading-snug">{injury.longComment || injury.shortComment || injury.description}</p>
-          {injury.date && <p className="text-gray-400 text-xs mt-1">{new Date(injury.date).toLocaleDateString()}</p>}
+      <div className={'px-4 py-2 rounded-xl text-center ' + badgeColor}>
+        <p className="text-white font-bold text-2xl tracking-wider">{badgeText}</p>
+      </div>
+
+      {/* Big YES price */}
+      <div className="bg-black/40 border border-white/10 rounded-xl p-4 text-center">
+        <p className="text-gray-400 text-sm uppercase tracking-wide mb-1">Current YES</p>
+        <p className="text-white text-6xl font-bold" style={{ fontFamily: 'var(--sw-display-font)' }}>{fmtPrice(last)}</p>
+        {deltaText && <p className={'text-xl font-bold mt-1 ' + deltaColor}>{deltaText}</p>}
+        {savedLast !== null && savedLast !== undefined && (
+          <p className="text-gray-400 text-base mt-2">You saved at {fmtPrice(savedLast)}</p>
+        )}
+      </div>
+
+      {/* NO / volume / countdown row */}
+      <div className="grid grid-cols-3 gap-2">
+        <div className="bg-black/30 border border-white/10 rounded-lg p-3 text-center">
+          <p className="text-gray-400 text-xs uppercase mb-1">NO</p>
+          <p className="text-white text-2xl font-bold">{fmtPrice(noPrice)}</p>
         </div>
-      )}
-      {(team || position) && (<div className="flex justify-between text-white text-xl">{team && <span><span className="text-gray-400">Team:</span> <strong>{team}</strong></span>}{position && <span><span className="text-gray-400">Pos:</span> <strong>{position}</strong></span>}</div>)}
-      {nextEvent && (
+        <div className="bg-black/30 border border-white/10 rounded-lg p-3 text-center">
+          <p className="text-gray-400 text-xs uppercase mb-1">Vol 24h</p>
+          <p className="text-white text-2xl font-bold">{fmtVolume(market.volume_24h)}</p>
+        </div>
+        <div className="bg-black/30 border border-white/10 rounded-lg p-3 text-center">
+          <p className="text-gray-400 text-xs uppercase mb-1">Closes</p>
+          <p className="text-white text-2xl font-bold">{countdown || '—'}</p>
+        </div>
+      </div>
+
+      {/* Sub-titles */}
+      {(market.yes_sub_title || market.no_sub_title) && (
         <div className="bg-black/30 border border-white/10 rounded-xl p-3">
-          <p className="text-gray-400 text-sm mb-1">Next Matchup</p>
-          <p className="text-white text-xl font-bold">{nextEvent.name || (nextEvent.competitions && nextEvent.competitions[0] && nextEvent.competitions[0].competitors && nextEvent.competitions[0].competitors.map(c => c.team && c.team.displayName).filter(Boolean).join(' vs ')) || ''}</p>
-          {nextEvent.date && <p className="text-gray-300 text-base">{new Date(nextEvent.date).toLocaleString()}</p>}
+          {market.yes_sub_title && <p className="text-emerald-300 text-base mb-1"><span className="font-bold">YES:</span> {market.yes_sub_title}</p>}
+          {market.no_sub_title && <p className="text-red-300 text-base"><span className="font-bold">NO:</span> {market.no_sub_title}</p>}
         </div>
       )}
-      {stats.length > 0 && (
-        <div className="bg-black/30 border border-white/10 rounded-xl p-3">
-          <p className="text-gray-400 text-sm mb-2">Season Stats</p>
-          {stats.slice(0, 3).map((cat, i) => {
-            const labels = cat.labels || cat.names || [];
-            const seasonRows = cat.statistics || [];
-            const latestRow = seasonRows.length > 0 ? seasonRows[seasonRows.length - 1] : null;
-            const values = (latestRow && latestRow.stats) || [];
-            const seasonYear = latestRow && latestRow.season ? (latestRow.season.displayName || latestRow.season.year) : '';
-            const pairs = labels.map((lbl, idx) => ({ label: lbl, value: values[idx] })).filter(p => p.value !== undefined && p.value !== '' && p.value !== '0');
-            if (pairs.length === 0) return null;
-            return (
-              <div key={i} className="mb-2 last:mb-0">
-                {(cat.displayName || seasonYear) && <p className="text-white/70 text-base font-bold">{cat.displayName}{seasonYear ? ' — ' + seasonYear : ''}</p>}
-                <div className="grid grid-cols-2 gap-2 mt-1">
-                  {pairs.slice(0, 8).map((p, j) => (
-                    <div key={j} className="flex justify-between text-white text-base"><span className="text-gray-400">{p.label}</span><span className="font-bold">{p.value}</span></div>
-                  ))}
-                </div>
-              </div>
-            );
-          })}
+
+      {/* Threshold + close time + category */}
+      <div className="bg-black/30 border border-white/10 rounded-xl p-3 space-y-1">
+        <div className="flex justify-between text-white text-base">
+          <span className="text-gray-400">Alert threshold</span>
+          <strong>{thresholdPct || DEFAULT_THRESHOLD}%</strong>
         </div>
-      )}
-      {news && (
-        <div className="bg-black/30 border border-white/10 rounded-xl p-3">
-          <p className="text-gray-400 text-sm mb-1">Latest News</p>
-          <p className="text-white text-xl font-bold leading-snug">{news.headline || news.description}</p>
-          {news.published && <p className="text-gray-400 text-sm mt-1">{new Date(news.published).toLocaleDateString()}</p>}
-        </div>
-      )}
+        {market.close_time && (
+          <div className="flex justify-between text-white text-base">
+            <span className="text-gray-400">Close time</span>
+            <strong>{new Date(market.close_time).toLocaleString()}</strong>
+          </div>
+        )}
+        {market.category && (
+          <div className="flex justify-between text-white text-base">
+            <span className="text-gray-400">Category</span>
+            <strong>{market.category}</strong>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
@@ -889,7 +959,7 @@ function App() {
   const gate = useAuthGate(Object.assign({}, AUTH_GATE_CONFIG, {
     // v0.3.3: after a capped-save signup, land the user on their saved list.
     onAuthSuccess: function (ctx) {
-      if (ctx && ctx.hadPendingAdd) { clearSearch(); setPage('myplayers'); }
+      if (ctx && ctx.hadPendingAdd) { clearSearch(); setPage('mymarkets'); }
     }
   }));
   // Compatibility shims -- read-only access for the rest of App().
@@ -902,21 +972,28 @@ function App() {
   const [searchResults, setSearchResults] = useState(null);
   const [searched, setSearched] = useState(false);
   const [searching, setSearching] = useState(false);
-  const [selectedPlayer, setSelectedPlayer] = useState(null);
+  const [selectedMarket, setSelectedMarket] = useState(null);
   const [loading, setLoading] = useState(false);
   const [loadingSave, setLoadingSave] = useState(false);
-  const [checkingStats, setCheckingStats] = useState(false);
+  const [checking, setChecking] = useState(false);
   const [backendWaking, setBackendWaking] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [searchName, setSearchName] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
   const [showDangerZone, setShowDangerZone] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [drawerData, setDrawerData] = useState(null);
   const [autoOpenId, setAutoOpenId] = useState(null);
   const [apiVersion, setApiVersion] = useState('...');
   const [toast, setToast] = useState(null);
+  const [featured, setFeatured] = useState([]);
+  const [featuredLoading, setFeaturedLoading] = useState(false);
+  const [categories, setCategories] = useState([]);
+  const [currentCategory, setCurrentCategory] = useState(null);
+  const [categoryMarkets, setCategoryMarkets] = useState([]);
+  const [categoryLoading, setCategoryLoading] = useState(false);
+  const [categoryFetchedAt, setCategoryFetchedAt] = useState(null);
 
   const showToast = (msg) => {
     setToast(msg);
@@ -928,7 +1005,8 @@ function App() {
     // Auth hydration + watchlist load are owned by useAuthGate now.
   }, []);
 
-  // Reload notifications when sign-in flips. Anon users have no server alerts.
+  // Reload notifications when sign-in flips. Anon users have no server
+  // alerts (no user_id), so the list stays empty for them.
   useEffect(() => {
     if (gate.isAuthed) loadNotifications();
     else setNotifications([]);
@@ -936,12 +1014,31 @@ function App() {
   }, [gate.isAuthed]);
 
   useEffect(() => {
-    if (autoOpenId && page === 'myplayers' && watchlist.length > 0) {
+    if (autoOpenId && page === 'mymarkets' && watchlist.length > 0) {
       const wItem = watchlist.find(w => w.id === autoOpenId);
-      if (wItem) { openMyPlayersDrawer(wItem); setAutoOpenId(null); }
+      if (wItem) { openMyMarketsDrawer(wItem); setAutoOpenId(null); }
     }
     // eslint-disable-next-line
   }, [autoOpenId, page, watchlist]);
+
+  // Categories are unauthed data -- anon users see them too.
+  useEffect(() => {
+    if (categories.length === 0) {
+      fetchKalshiCategories().then(list => { if (list && list.length) setCategories(list); });
+    }
+    // eslint-disable-next-line
+  }, []);
+
+  // Load markets for the currently-selected category. Re-runs when user picks a different category.
+  useEffect(() => {
+    if (!currentCategory) { setCategoryMarkets([]); setCategoryFetchedAt(null); return; }
+    setCategoryLoading(true);
+    fetchKalshiMarketsByCategory(currentCategory, 30).then(list => {
+      setCategoryMarkets(list || []);
+      setCategoryFetchedAt(new Date());
+      setCategoryLoading(false);
+    });
+  }, [currentCategory]);
 
   // Backwards-compat alias -- watchlist loading is owned by AuthGate.
   const loadWatchlist = () => gate.refreshList();
@@ -960,12 +1057,12 @@ function App() {
   };
   const viewAlert = (n) => {
     const wItem = watchlist.find(w => w.id === n.watchlist_id);
-    if (wItem) { setPage('myplayers'); setAutoOpenId(wItem.id); }
+    if (wItem) { setPage('mymarkets'); setAutoOpenId(wItem.id); }
   };
   // doAuth removed -- AuthGate owns register/login via gate.openSignup() and gate.openSignin().
   const doLogout = () => {
     gate.signOut();
-    setSearchResults(null); setSearched(false); setSelectedPlayer(null);
+    setSearchResults(null); setSearched(false); setSelectedMarket(null);
     setPage('search');
   };
   const doDeleteAccount = async () => {
@@ -976,135 +1073,175 @@ function App() {
       doLogout(); alert('Your account has been permanently deleted.');
     } catch (error) { alert('Error: ' + error.message); }
   };
-  const clearSearch = () => { setSearchResults(null); setSearched(false); setSelectedPlayer(null); setSearchName(''); };
-  const isOnList = (name) => { if (!name) return false; const lower = name.trim().toLowerCase(); return !!watchlist.find(w => w && w.name && w.name.trim().toLowerCase() === lower); };
+  const clearSearch = () => { setSearchResults(null); setSearched(false); setSelectedMarket(null); setSearchQuery(''); setCurrentCategory(null); setCategoryMarkets([]); };
+  const isOnList = (ticker) => { if (!ticker) return false; return !!watchlist.find(w => { const m = parseMeta(w.location); return m && m.ticker === ticker; }); };
   const parseMeta = (locationField) => { if (!locationField) return null; try { return JSON.parse(locationField); } catch(e) { return null; } };
 
-  const doSearch = async () => {
+  const doSearch = async (overrideQuery) => {
     if (document.activeElement) document.activeElement.blur();
-    const name = smartTitleCase((searchName || '').trim().replace(/\s+/g, ' '));
-    if (!name || name.length < 2) { alert('Please enter a player name.'); return; }
-    setSearching(true); setSearchResults(null); setSelectedPlayer(null);
+    const rawQ = overrideQuery !== undefined && overrideQuery !== null ? overrideQuery : searchQuery;
+    const q = (rawQ || '').trim();
+    if (!q || q.length < 2) { alert('Please enter a search keyword.'); return; }
+    if (overrideQuery !== undefined && overrideQuery !== null) setSearchQuery(q);
+    setSearching(true); setSearchResults(null); setSelectedMarket(null);
     try {
-      const [wiki, espnPlayers] = await Promise.all([fetchWikiBio(name).catch(() => null), fetchEspnPlayers(name).catch(() => [])]);
-      setSearchResults({ wiki, espnPlayers, queryName: name }); setSearched(true);
-      if (espnPlayers.length === 1) setSelectedPlayer(espnPlayers[0]);
-    } catch(e) { setSearchResults({ wiki: null, espnPlayers: [], queryName: name }); setSearched(true); }
+      const markets = await fetchKalshiSearch(q);
+      setSearchResults({ markets, query: q });
+      setSearched(true);
+      if (markets.length === 1) setSelectedMarket(markets[0]);
+    } catch(e) { setSearchResults({ markets: [], query: q }); setSearched(true); }
     finally { setSearching(false); }
   };
 
+  // Tap a featured market → jump straight to the save flow as if it were a 1-result search
+  const pickFeatured = (m) => {
+    setSearchResults({ markets: [m], query: m.title || m.ticker });
+    setSelectedMarket(m);
+    setSearched(true);
+  };
+
   // SAVE: route through AuthGate (anon -> localStorage with 5-cap, authed -> server).
-  // Then snapshot to localStorage, navigate to My Players, auto-open the drawer.
-  const savePlayer = async () => {
-    if (!selectedPlayer && !(searchResults && searchResults.queryName)) return;
-    const playerName = selectedPlayer ? selectedPlayer.displayName : (searchResults && searchResults.queryName);
-    if (!playerName) return;
-    if (isOnList(playerName)) { alert(playerName + ' is already saved.'); return; }
+  // Then snapshot to localStorage, navigate to My Markets, auto-open the drawer.
+  const saveMarket = async () => {
+    if (!selectedMarket) return;
+    if (isOnList(selectedMarket.ticker)) { alert('That market is already on your watchlist.'); return; }
+    const heading = marketHeading(selectedMarket);
+    const detail = marketDetail(selectedMarket);
+    const title = detail ? heading + ' · ' + detail : (heading || selectedMarket.ticker);
     setLoadingSave(true);
     try {
-      const meta = selectedPlayer ? JSON.stringify({
-        espnId: selectedPlayer.id, sport: selectedPlayer.sport, league: selectedPlayer.league,
-        team: selectedPlayer.team, position: selectedPlayer.position, headshot: selectedPlayer.headshot
-      }) : '';
-      const created = await gate.add({ name: playerName, location: meta });
+      const meta = JSON.stringify({
+        platform: 'kalshi',
+        ticker: selectedMarket.ticker,
+        event_ticker: selectedMarket.event_ticker,
+        event_title: selectedMarket.event_title || '',
+        event_sub_title: selectedMarket.event_sub_title || '',
+        subtitle: selectedMarket.subtitle || '',
+        yes_sub_title: selectedMarket.yes_sub_title || '',
+        no_sub_title: selectedMarket.no_sub_title || '',
+        category: selectedMarket.category || '',
+        close_time: selectedMarket.close_time || '',
+        savedYesPrice: selectedMarket.last_price,
+        savedAt: new Date().toISOString(),
+        threshold: DEFAULT_THRESHOLD
+      });
+      const created = await gate.add({ name: title, location: meta });
       if (!created) {
         // Hit the anon 5-cap -- AuthGate opened the signup modal.
         return;
       }
-      if (selectedPlayer && selectedPlayer.sport && selectedPlayer.league && selectedPlayer.id) {
-        const overview = await fetchEspnOverview(selectedPlayer.sport, selectedPlayer.league, selectedPlayer.id).catch(() => null);
-        const snap = buildSnapshot(overview);
-        if (snap && created.id) saveStatSnapshot(created.id, snap);
-      }
-      clearSearch(); setPage('myplayers');
+      // Snapshot the fresh Kalshi data under the new item id (anon or server).
+      const fresh = await fetchKalshiMarket(selectedMarket.ticker).catch(() => null);
+      const snap = buildSnapshot(fresh || selectedMarket);
+      if (snap && created.id) saveSnapshot(created.id, snap);
+      clearSearch(); setPage('mymarkets');
       if (created.id) setAutoOpenId(created.id);
     } catch(e) { alert('Error: ' + e.message); }
     finally { setLoadingSave(false); }
   };
 
-  const delPlayer = async (id) => {
+  const delMarket = async (id) => {
     try {
       await gate.remove(id);
-      deleteStatSnapshot(id);
+      deleteSnapshotLocal(id);
     } catch (error) { alert('Error: ' + error.message); }
   };
 
-  // Watchlist drawer (light): hero + Wiki bio + Check button
+  // Watchlist drawer (light): title + saved price + Check button
   const openWatchlistDrawer = async (wItem) => {
     const meta = parseMeta(wItem.location);
-    setDrawerData({ mode: 'watchlist', name: wItem.name, watchlistId: wItem.id, meta: meta, wiki: null, snapshot: null, loading: true });
-    const wiki = await fetchWikiBio(wItem.name).catch(() => null);
-    setDrawerData(prev => prev ? Object.assign({}, prev, { wiki: wiki, loading: false }) : null);
+    const snap = getSnapshot(wItem.id);
+    setDrawerData({ mode: 'watchlist', name: wItem.name, watchlistId: wItem.id, meta: meta, snapshot: snap, market: null, loading: false });
   };
 
-  // My Players drawer (full): hero + Wiki bio + StatPanel. Re-fetches fresh ESPN data on every tap.
-  const openMyPlayersDrawer = async (wItem) => {
+  // My Markets drawer (full): re-fetch fresh Kalshi data
+  const openMyMarketsDrawer = async (wItem) => {
     const meta = parseMeta(wItem.location);
-    let snapshot = getStatSnapshot(wItem.id);
-    setDrawerData({ mode: 'myplayers', name: wItem.name, watchlistId: wItem.id, meta: meta, wiki: null, snapshot: snapshot, loading: true });
-    const wiki = await fetchWikiBio(wItem.name).catch(() => null);
-    if (meta && meta.sport && meta.league && meta.espnId) {
-      const overview = await fetchEspnOverview(meta.sport, meta.league, meta.espnId).catch(() => null);
-      const snap = buildSnapshot(overview);
-      if (snap) { saveStatSnapshot(wItem.id, snap); snapshot = snap; }
+    let snap = getSnapshot(wItem.id);
+    setDrawerData({ mode: 'mymarkets', name: wItem.name, watchlistId: wItem.id, meta: meta, snapshot: snap, market: null, loading: true });
+    if (meta && meta.ticker) {
+      const fresh = await fetchKalshiMarket(meta.ticker).catch(() => null);
+      if (fresh) {
+        const newSnap = buildSnapshot(fresh);
+        if (newSnap) { saveSnapshot(wItem.id, newSnap); snap = newSnap; }
+        setDrawerData(prev => prev ? Object.assign({}, prev, { market: fresh, snapshot: snap, loading: false }) : null);
+      } else {
+        setDrawerData(prev => prev ? Object.assign({}, prev, { loading: false }) : null);
+      }
+    } else {
+      setDrawerData(prev => prev ? Object.assign({}, prev, { loading: false }) : null);
     }
-    setDrawerData(prev => prev ? Object.assign({}, prev, { wiki: wiki, snapshot: snapshot, loading: false }) : null);
   };
 
-  // Check for new stats: re-fetch, diff, transform drawer in place (no nav jump)
-  const checkForNewStats = async () => {
+  // Check for price move (transforms watchlist drawer into mymarkets drawer if changed)
+  const checkForPriceMove = async () => {
     if (!drawerData || !drawerData.watchlistId) return;
     const meta = drawerData.meta;
-    if (!meta || !meta.sport || !meta.league || !meta.espnId) { alert('No ESPN data linked to this player.'); return; }
-    setCheckingStats(true);
+    if (!meta || !meta.ticker) { alert('No Kalshi ticker linked to this market.'); return; }
+    setChecking(true);
     try {
-      const overview = await fetchEspnOverview(meta.sport, meta.league, meta.espnId);
-      const newSnap = buildSnapshot(overview);
-      if (!newSnap) { alert('Could not reach ESPN. Try again later.'); return; }
-      const oldSnap = getStatSnapshot(drawerData.watchlistId);
-      if (!snapshotChanged(oldSnap, newSnap)) { showToast('No Stats Yet, Try Later'); return; }
-      saveStatSnapshot(drawerData.watchlistId, newSnap);
-      // Transform the open drawer from watchlist-mode to myplayers-mode in place.
-      // User stays on whatever page they were on (Watchlist most often).
-      // Closing the drawer naturally returns them to that page.
-      setDrawerData(prev => prev ? Object.assign({}, prev, { mode: 'myplayers', snapshot: newSnap }) : null);
+      const fresh = await fetchKalshiMarket(meta.ticker);
+      if (!fresh) { alert('Could not reach Kalshi. Try again later.'); return; }
+      const now = Date.now();
+      const newSnap = buildSnapshot(fresh);
+      const oldSnap = getSnapshot(drawerData.watchlistId);
+      const threshold = (meta && meta.threshold) || DEFAULT_THRESHOLD;
+      if (!snapshotChanged(oldSnap, newSnap, threshold)) {
+        showToast('No move past your threshold');
+        setDrawerData(prev => prev ? Object.assign({}, prev, { lastCheckedAt: now, market: fresh }) : null);
+        return;
+      }
+      saveSnapshot(drawerData.watchlistId, newSnap);
+      setDrawerData(prev => prev ? Object.assign({}, prev, { mode: 'mymarkets', snapshot: newSnap, market: fresh, lastCheckedAt: now }) : null);
     } catch(e) { alert('Error: ' + e.message); }
-    finally { setCheckingStats(false); }
+    finally { setChecking(false); }
   };
 
   const unreadCount = notifications.length;
-  const iClass = "w-full px-4 py-3 border border-white/30 rounded-lg focus:ring-2 focus:ring-blue-400 text-xl bg-black/40 text-white placeholder-gray-400";
+  const iClass = "w-full px-4 py-3 border border-white/30 rounded-lg focus:ring-2 focus:ring-teal-400 text-xl bg-black/40 text-white placeholder-gray-400";
   const cardClass = "rounded-2xl p-4 shadow-lg backdrop-blur-sm";
-  const cardStyle = { backgroundColor: 'var(--pw-card-bg)', borderColor: 'var(--pw-card-border)', borderWidth: '1px' };
+  const cardStyle = { backgroundColor: 'var(--sw-card-bg)', borderColor: 'var(--sw-card-border)', borderWidth: '1px' };
   const containerClass = (page === 'about') ? 'w-full max-w-3xl mx-auto px-3' : 'w-full px-3';
 
-  const PlayerCard = ({ wiki, espnPlayer, showSaveButton }) => {
-    const display = espnPlayer ? espnPlayer.displayName : (wiki && wiki.title) || '';
-    const photo = (espnPlayer && espnPlayer.headshot) || (wiki && wiki.thumbnail) || '';
-    const alreadySaved = isOnList(display);
+  const MarketCard = ({ market, showSaveButton }) => {
+    if (!market) return null;
+    const heading = marketHeading(market);
+    const detail = marketDetail(market);
+    const alreadySaved = isOnList(market.ticker);
+    const last = market.last_price;
+    const noPrice = (last !== null && last !== undefined) ? (100 - last) : null;
     return (
-      <div className="rounded-2xl overflow-hidden border border-white/15 shadow-lg" style={{ backgroundColor: 'rgba(0,0,0,0.55)' }}>
-        <div className="px-5 py-3 text-center" style={{ background: 'linear-gradient(90deg, var(--pw-accent-2), var(--pw-accent))' }}>
-          <p className="text-white font-black text-3xl">{display}</p>
-          {espnPlayer && (espnPlayer.team || espnPlayer.position) && (<p className="text-white/90 text-xl">{[espnPlayer.team, espnPlayer.position].filter(Boolean).join(' • ')}</p>)}
+      <div className="rounded-2xl overflow-hidden border border-white/15 shadow-lg" style={{ backgroundColor: 'rgba(10,21,37,0.65)' }}>
+        <div className="px-5 py-3 text-center" style={{ background: 'linear-gradient(90deg, #0d3a3a, #0a1f4a)' }}>
+          <p className="text-white font-bold text-2xl leading-snug">{heading}</p>
+          {detail && <p className="text-white/80 text-lg mt-1">Option: <strong>{detail}</strong></p>}
+          {market.category && <p className="text-white/70 text-base uppercase tracking-wider mt-1">{market.category}</p>}
         </div>
-        <div className="p-4">
-          <div className="flex gap-3 items-start mb-3">
-            {photo ? <img src={photo} alt={display} className="w-20 h-20 rounded-full object-cover border-2 border-white/30 shrink-0" /> : <div className="w-20 h-20 rounded-full bg-black/40 flex items-center justify-center shrink-0 text-2xl text-white">?</div>}
-            <div className="flex-1">
-              {wiki && wiki.description && <p className="text-blue-200 text-xl italic">{wiki.description}</p>}
-              {espnPlayer && espnPlayer.league && <p className="text-white/70 text-base mt-1">{espnPlayer.league.toUpperCase()}</p>}
+        <div className="p-4 space-y-3">
+          <div className="grid grid-cols-3 gap-2">
+            <div className="bg-black/30 border border-white/10 rounded-lg p-3 text-center">
+              <p className="text-gray-400 text-xs uppercase mb-1">YES</p>
+              <p className="text-emerald-300 text-3xl font-bold" style={{ fontFamily: 'var(--sw-display-font)' }}>{fmtPrice(last)}</p>
+            </div>
+            <div className="bg-black/30 border border-white/10 rounded-lg p-3 text-center">
+              <p className="text-gray-400 text-xs uppercase mb-1">NO</p>
+              <p className="text-red-300 text-3xl font-bold" style={{ fontFamily: 'var(--sw-display-font)' }}>{fmtPrice(noPrice)}</p>
+            </div>
+            <div className="bg-black/30 border border-white/10 rounded-lg p-3 text-center">
+              <p className="text-gray-400 text-xs uppercase mb-1">Closes</p>
+              <p className="text-white text-xl font-bold">{fmtCountdown(market.close_time) || '—'}</p>
             </div>
           </div>
-          {wiki && wiki.extract && <p className="text-gray-100 text-xl leading-relaxed mb-3">{wiki.extract}</p>}
+          {market.yes_sub_title && <p className="text-emerald-200 text-base"><span className="font-bold">YES:</span> {market.yes_sub_title}</p>}
+          {market.no_sub_title && <p className="text-red-200 text-base"><span className="font-bold">NO:</span> {market.no_sub_title}</p>}
+          {market.volume_24h !== undefined && market.volume_24h !== null && <p className="text-gray-400 text-base">Vol 24h: <strong className="text-white">{fmtVolume(market.volume_24h)}</strong></p>}
           {showSaveButton && (
-            <div className="space-y-2">
-              {alreadySaved ? <p className="text-green-300 text-xl text-center font-bold">Already saved</p> : <button onClick={savePlayer} disabled={loadingSave || !espnPlayer} className="w-full py-4 text-white rounded-xl font-bold text-2xl flex items-center justify-center gap-2 disabled:opacity-50" style={{ backgroundColor: 'var(--pw-accent)' }}><PlusIcon /> {loadingSave ? 'Saving...' : 'Save Player'}</button>}
-              {!espnPlayer && <p className="text-yellow-300 text-base text-center">Pick a sport/league above to enable Save.</p>}
+            <div className="space-y-2 pt-2">
+              {alreadySaved ? <p className="text-emerald-300 text-xl text-center font-bold">Already on your watchlist</p> : <button onClick={saveMarket} disabled={loadingSave} className="w-full py-4 text-white rounded-xl font-bold text-2xl flex items-center justify-center gap-2 disabled:opacity-50" style={{ backgroundColor: 'var(--sw-accent)' }}><PlusIcon /> {loadingSave ? 'Saving...' : 'Save Market'}</button>}
               <button onClick={clearSearch} className="w-full py-3 bg-white/10 border border-white/20 text-white/80 rounded-xl text-xl text-center">Clear Search</button>
             </div>
           )}
-          <p className="text-gray-400 text-sm mt-3 text-center">Bio: Wikipedia. Stats: ESPN.</p>
+          <p className="text-gray-400 text-sm text-center pt-1">Prices: Kalshi</p>
         </div>
       </div>
     );
@@ -1112,41 +1249,38 @@ function App() {
 
   const Drawer = () => {
     if (!drawerData) return null;
-    const { mode, name, meta, wiki, snapshot, loading: drawerLoading } = drawerData;
-    const photo = (meta && meta.headshot) || (wiki && wiki.thumbnail) || '';
-    const overview = snapshot ? snapshot.overview : null;
+    const { mode, name, meta, snapshot, market, loading: drawerLoading, lastCheckedAt } = drawerData;
+    const threshold = (meta && meta.threshold) || DEFAULT_THRESHOLD;
     return (
       <>
         <div className="modal-overlay" onClick={() => setDrawerData(null)} />
         <div className="modal-drawer">
           <div className="flex justify-between items-center px-4 pt-4 pb-2 border-b border-white/15">
-            <h3 className="text-white font-bold text-2xl">{name}</h3>
-            <button onClick={() => setDrawerData(null)} className="text-gray-400 hover:text-white text-2xl font-bold">X</button>
+            <h3 className="text-white font-bold text-2xl leading-snug pr-2">{name}</h3>
+            <button onClick={() => setDrawerData(null)} className="text-gray-400 hover:text-white text-2xl font-bold shrink-0">X</button>
           </div>
           <div className="p-4">
             {drawerLoading && <div className="text-center py-8"><p className="text-white animate-pulse text-xl">Loading...</p></div>}
             {!drawerLoading && (
               <>
-                <div className="px-4 py-3 rounded-xl mb-3 text-center" style={{ background: 'linear-gradient(90deg, var(--pw-accent-2), var(--pw-accent))' }}>
-                  <p className="text-white font-black text-3xl">{name}</p>
-                  {meta && (meta.team || meta.position) && (<p className="text-white/90 text-xl">{[meta.team, meta.position].filter(Boolean).join(' • ')}</p>)}
-                </div>
-                <div className="flex gap-3 items-start mb-3">
-                  {photo ? <img src={photo} alt={name} className="w-20 h-20 rounded-full object-cover border-2 border-white/30 shrink-0" /> : <div className="w-20 h-20 rounded-full bg-black/40 flex items-center justify-center shrink-0 text-2xl text-white">?</div>}
-                  <div className="flex-1">
-                    {wiki && wiki.description && <p className="text-blue-200 text-xl italic">{wiki.description}</p>}
-                    {meta && meta.league && <p className="text-white/70 text-base mt-1">{meta.league.toUpperCase()}</p>}
-                  </div>
-                </div>
-                {wiki && wiki.extract && <p className="text-gray-100 text-xl leading-relaxed mb-3">{wiki.extract}</p>}
                 {mode === 'watchlist' && (
-                  <button onClick={checkForNewStats} disabled={checkingStats} className="w-full py-4 text-white rounded-xl font-bold text-2xl flex items-center justify-center gap-2 disabled:opacity-50 mt-2" style={{ backgroundColor: 'var(--pw-accent)' }}>
-                    <RefreshIcon /> {checkingStats ? 'Checking...' : 'Check for new stats'}
-                  </button>
+                  <div className="space-y-3">
+                    <div className="bg-black/40 border border-white/10 rounded-xl p-4 text-center">
+                      <p className="text-gray-400 text-sm uppercase tracking-wide mb-1">You saved at</p>
+                      <p className="text-white text-5xl font-bold" style={{ fontFamily: 'var(--sw-display-font)' }}>{snapshot ? fmtPrice(snapshot.last_price) : '—'}</p>
+                      {snapshot && snapshot.capturedAt && <p className="text-gray-400 text-base mt-2">{new Date(snapshot.capturedAt).toLocaleString()}</p>}
+                    </div>
+                    {(meta && meta.yes_sub_title) && <p className="text-emerald-200 text-base text-center"><span className="font-bold">YES:</span> {meta.yes_sub_title}</p>}
+                    <p className="text-gray-400 text-base text-center">Alert threshold: <strong className="text-white">{threshold}%</strong></p>
+                    {lastCheckedAt && <p className="text-white/60 text-sm text-center">Last checked {new Date(lastCheckedAt).toLocaleString()}</p>}
+                    <button onClick={checkForPriceMove} disabled={checking} className="w-full py-4 text-white rounded-xl font-bold text-2xl flex items-center justify-center gap-2 disabled:opacity-50" style={{ backgroundColor: 'var(--sw-accent)' }}>
+                      <RefreshIcon /> {checking ? 'Checking...' : 'Check current price'}
+                    </button>
+                  </div>
                 )}
-                {mode === 'myplayers' && <StatPanel overview={overview} />}
-                {mode === 'myplayers' && snapshot && snapshot.capturedAt && (<p className="text-white/40 text-sm text-center mt-3">Last updated {new Date(snapshot.capturedAt).toLocaleString()}</p>)}
-                {mode === 'myplayers' && (<p className="text-gray-400 text-sm text-center mt-2">Bio: Wikipedia. Stats &amp; news: ESPN.</p>)}
+                {mode === 'mymarkets' && <MarketPanel market={market} savedSnap={snapshot} thresholdPct={threshold} />}
+                {mode === 'mymarkets' && snapshot && snapshot.capturedAt && (<p className="text-white/40 text-sm text-center mt-3">Last updated {new Date(snapshot.capturedAt).toLocaleString()}</p>)}
+                {mode === 'mymarkets' && (<p className="text-gray-400 text-sm text-center mt-2">Prices: Kalshi</p>)}
               </>
             )}
             <button onClick={() => setDrawerData(null)} className="w-full py-4 bg-white/10 border border-white/20 text-white rounded-xl text-xl mt-4">Close</button>
@@ -1156,33 +1290,109 @@ function App() {
     );
   };
 
-  // [v1.0.26] Login splash removed. AuthGate handles sign-in/sign-up modally.
-  // Anonymous users land on Search; modal opens on Save-at-cap or via Info page.
+  // [v0.3.0] Login splash removed. AuthGate handles sign-in/sign-up modally.
+  // Anonymous users land on the Search page; the modal opens on Save-at-cap
+  // or via the Info page Sign Up / Sign In buttons.
 
   return (
     <PageWrapper>
       {gate.modal}
       <Drawer />
       {toast && (
-        <div style={{ position: 'fixed', left: '50%', transform: 'translateX(-50%)', bottom: 'calc(6rem + env(safe-area-inset-bottom))', zIndex: 200, backgroundColor: 'var(--pw-accent)', color: '#fff', padding: '1.1rem 1.8rem', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.25)', fontSize: '1.5rem', fontWeight: 700, boxShadow: '0 6px 20px rgba(0,0,0,0.6)', whiteSpace: 'nowrap' }}>{toast}</div>
+        <div style={{ position: 'fixed', left: '50%', transform: 'translateX(-50%)', bottom: 'calc(6rem + env(safe-area-inset-bottom))', zIndex: 200, backgroundColor: 'var(--sw-accent)', color: '#0a1525', padding: '1.1rem 1.8rem', borderRadius: '999px', border: '1px solid rgba(255,255,255,0.25)', fontSize: '1.5rem', fontWeight: 700, boxShadow: '0 6px 20px rgba(0,0,0,0.6)', whiteSpace: 'nowrap' }}>{toast}</div>
       )}
       <div className={containerClass}>
 
         {page === 'search' && (
           <div className="space-y-3" style={{ paddingTop: PT }}>
-            <div className="flex flex-col items-center" style={{ height: PT, marginTop: '-' + PT, paddingTop: '4rem', paddingBottom: '1.5rem', pointerEvents: 'none' }}>
-              <h1 className="text-white font-black text-center" style={{ fontSize: isPhone ? '5.5rem' : '7.5rem', fontFamily: 'var(--pw-display-font)', letterSpacing: '0.04em', lineHeight: 0.9, textShadow: '0 4px 16px rgba(0,0,0,0.9)' }}>PLAYER<br/>WATCH</h1>
-              <p className="text-white text-center" style={{ fontSize: isPhone ? '2rem' : '2.6rem', fontFamily: 'var(--pw-display-font)', letterSpacing: '0.04em', lineHeight: 1.05, textShadow: '0 2px 8px rgba(0,0,0,0.9)', marginTop: '1rem' }}>Who Are You<br/>Watching?</p>
+            <div className="flex flex-col items-center" style={{ height: PT, marginTop: '-' + PT, paddingTop: isPhone ? '1rem' : '4rem', paddingBottom: isPhone ? '0.75rem' : '1.5rem', pointerEvents: 'none' }}>
+              <h1 className="text-white text-center" style={{ fontSize: isPhone ? '5.5rem' : '9rem', fontFamily: 'var(--sw-display-font)', letterSpacing: '0.05em', lineHeight: 0.9, textShadow: '0 4px 16px rgba(0,0,0,0.9)', textTransform: 'uppercase', fontWeight: 700 }}>Stakes<br/>Watch</h1>
+              <p className="text-white text-center" style={{ fontSize: isPhone ? '1.75rem' : '2.75rem', fontFamily: 'var(--sw-display-font)', letterSpacing: '0.04em', lineHeight: 1.05, textShadow: '0 2px 8px rgba(0,0,0,0.9)', marginTop: isPhone ? '0.5rem' : '1rem', textTransform: 'uppercase', fontWeight: 500 }}>What stakes are<br/>you watching?</p>
+              <p className="text-white/90 text-center" style={{ fontSize: isPhone ? '1.125rem' : '1.5rem', lineHeight: 1.3, textShadow: '0 2px 6px rgba(0,0,0,0.85)', marginTop: isPhone ? '0.4rem' : '0.75rem', maxWidth: '32ch', marginLeft: 'auto', marginRight: 'auto', paddingLeft: '1rem', paddingRight: '1rem' }}>Pick a market.<br/>Add to your Watchlist.<br/>We'll watch the price for you.</p>
             </div>
             <div className={cardClass} style={Object.assign({}, cardStyle, { overflowY: 'auto', maxHeight: 'calc(100dvh - ' + PT + ' - 6rem)' })}>
-              {searching && <p className="text-white text-center py-4 animate-pulse text-xl">Searching...</p>}
+              {searching && <p className="text-white text-center py-4 animate-pulse text-xl">Searching Kalshi...</p>}
               {!searched ? (
-                <div className="space-y-2">
-                  <ClearableInput value={searchName} onChange={(e) => setSearchName(e.target.value)} onBlur={(e) => setSearchName(smartTitleCase(e.target.value.trim()))} onKeyPress={(e) => e.key === 'Enter' && doSearch()} placeholder="Player name" inputClass={iClass} />
-                  <button onClick={doSearch} disabled={searching} className="w-full py-3 text-white rounded-lg flex items-center justify-center gap-2 disabled:opacity-50 text-2xl font-bold" style={{ backgroundColor: 'var(--pw-accent)' }}>
-                    <SearchIcon /> {searching ? 'Searching...' : 'Find Player'}
-                  </button>
-                  <p className="text-gray-300 text-sm text-center">All major sports: NFL, NBA, MLB, NHL, MLS</p>
+                <div className="space-y-4">
+
+                  {/* Primary: keyword search. Kalshi users typically know what question they want to watch. */}
+                  {!currentCategory && (
+                    <div>
+                      <ClearableInput value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} onKeyPress={(e) => e.key === 'Enter' && doSearch()} placeholder="e.g. Fed, Bitcoin, hurricane" inputClass={iClass} />
+                      <button onClick={() => doSearch()} disabled={searching} className="w-full py-3 mt-2 text-white rounded-lg flex items-center justify-center gap-2 disabled:opacity-50 text-lg font-bold" style={{ backgroundColor: 'var(--sw-accent)' }}>
+                        <SearchIcon /> {searching ? 'Searching...' : 'Search'}
+                      </button>
+                    </div>
+                  )}
+
+                  {/* Drilldown: markets within selected category */}
+                  {currentCategory && (
+                    <div>
+                      <div className="flex items-center justify-between mb-2">
+                        <button onClick={() => setCurrentCategory(null)} className="text-white/80 text-base underline">← Categories</button>
+                        <p className="text-white text-xl font-bold" style={{ fontFamily: 'var(--sw-display-font)', letterSpacing: '0.04em', textTransform: 'uppercase' }}>{currentCategory}</p>
+                        <span className="text-white/40 text-xs w-16 text-right">{categoryMarkets.length}</span>
+                      </div>
+                      {!categoryLoading && categoryMarkets.length > 0 && (
+                        <div className="flex flex-col items-center mb-3">
+                          <p className="text-white/80 text-sm text-center leading-snug">Tap a market → <span className="text-emerald-300 font-semibold">Watchlist</span> (hourly alerts) or <span className="text-emerald-300 font-semibold">My Stakes</span> (instant updates)</p>
+                          {categoryFetchedAt && <p className="text-white/40 text-xs mt-1">As of {fmtClockTime(categoryFetchedAt)}</p>}
+                        </div>
+                      )}
+                      {categoryLoading && <p className="text-white/70 text-center py-6 animate-pulse text-lg">Loading markets...</p>}
+                      {!categoryLoading && categoryMarkets.length === 0 && (
+                        <p className="text-white/50 text-center py-4 text-base">No active markets in this category right now. Try another.</p>
+                      )}
+                      {!categoryLoading && categoryMarkets.length > 0 && (
+                        <div className="space-y-2">
+                          {categoryMarkets.map((m, i) => {
+                            const heading = marketHeading(m);
+                            const detail = marketDetail(m);
+                            const title = detail ? heading + ' · ' + detail : heading;
+                            const delta = fmtPriceDelta(m.last_price, m.previous_price);
+                            const deltaUp = delta && delta.charAt(0) === '▲';
+                            const countdown = fmtCountdown(m.close_time);
+                            const hasYes = m.last_price !== null && m.last_price !== undefined;
+                            const noPrice = hasYes ? (100 - m.last_price) : null;
+                            return (
+                              <button key={i} onClick={() => pickFeatured(m)} className="w-full p-3 bg-black/40 border border-white/15 rounded-xl text-left hover:bg-black/60">
+                                <p className="text-white text-lg font-bold leading-snug">{title}</p>
+                                <div className="flex items-center gap-2 mt-1 flex-wrap">
+                                  {hasYes && <span className="text-emerald-300 text-base font-bold">{fmtPrice(m.last_price)} YES</span>}
+                                  {hasYes && <span className="text-white/40">·</span>}
+                                  {hasYes && <span className="text-red-300 text-base font-bold">{fmtPrice(noPrice)} NO</span>}
+                                  {delta && <span className={(deltaUp ? 'text-emerald-300' : 'text-red-300') + ' text-sm font-bold'}>{delta}</span>}
+                                </div>
+                                <div className="flex items-center gap-3 mt-1 flex-wrap">
+                                  {countdown && <span className="text-white/60 text-xs">Closes in {countdown}</span>}
+                                  {m.volume_24h !== undefined && m.volume_24h !== null && m.volume_24h > 0 && <span className="text-white/60 text-xs">Vol {fmtVolume(m.volume_24h)}</span>}
+                                </div>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Secondary: browse by category */}
+                  {!currentCategory && (
+                    <div className="pt-3 border-t border-white/15">
+                      <p className="text-white/80 text-lg text-center mb-3 font-semibold" style={{ fontFamily: 'var(--sw-display-font)', letterSpacing: '0.03em', textTransform: 'uppercase' }}>Or browse by category</p>
+                      <div className="grid grid-cols-2 gap-2">
+                        {categories.length === 0 && <p className="col-span-2 text-white/50 text-center py-3 text-base animate-pulse">Loading categories...</p>}
+                        {categories.map(c => (
+                          <button key={c} onClick={() => setCurrentCategory(c)}
+                            className="p-4 bg-black/40 border border-white/20 rounded-xl text-white text-lg font-bold hover:bg-black/60"
+                            style={{ fontFamily: 'var(--sw-display-font)', letterSpacing: '0.03em', textTransform: 'uppercase' }}>
+                            {c}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  <p className="text-gray-400 text-xs text-center pt-2">Tap a market to save it. Source: Kalshi.</p>
                 </div>
               ) : (<SearchResultView />)}
             </div>
@@ -1192,25 +1402,30 @@ function App() {
         {page === 'watchlist' && (
           <div className="space-y-3" style={{ paddingTop: '1rem' }}>
             <div className={cardClass} style={cardStyle}>
-              <CardPageHeader title="Watchlist" subtitle="Tap a name -- check for new stats" />
+              <CardPageHeader title="Watchlist" subtitle="Tap a market -- check current price" />
               <gate.CounterBanner />
-              {watchlist.length === 0 && (<div className="py-6 text-center"><p className="text-gray-200 text-xl leading-relaxed mb-2">No players yet.</p><p className="text-white text-xl font-medium">Use Search to add players.</p></div>)}
+              {watchlist.length === 0 && (<div className="py-6 text-center"><p className="text-gray-200 text-xl leading-relaxed mb-2">No markets yet.</p><p className="text-white text-xl font-medium">Use Search to add markets.</p></div>)}
               {watchlist.length > 0 && (
                 <div className="space-y-2 mt-2">
                   {watchlist.map(w => {
                     const meta = parseMeta(w.location);
+                    const snap = getSnapshot(w.id);
                     return (
                       <div key={w.id} className="p-4 rounded-lg border bg-black/40 border-white/15">
                         <div className="flex items-center justify-between">
                           <div className="flex-1 min-w-0">
                             <button onClick={() => openWatchlistDrawer(w)} className="text-left w-full">
-                              <h3 className="font-semibold text-2xl text-white underline decoration-dotted truncate">{w.name}</h3>
+                              <h3 className="font-semibold text-2xl text-white underline decoration-dotted leading-snug">{w.name}</h3>
                             </button>
-                            {meta && (meta.team || meta.position) && <p className="text-xl text-gray-300">{[meta.team, meta.position].filter(Boolean).join(' • ')}</p>}
-                            {meta && meta.league && <p className="text-base text-white/60 uppercase">{meta.league}</p>}
-                            <div className="flex items-center gap-1 mt-1"><CheckIcon /><span className="text-xl text-green-300">Watching</span></div>
+                            <div className="flex items-center gap-3 mt-1 flex-wrap">
+                              {snap && snap.last_price !== undefined && <span className="text-emerald-300 text-xl font-bold">{fmtPrice(snap.last_price)} YES</span>}
+                              {meta && meta.category && <span className="text-white/60 text-base uppercase">{meta.category}</span>}
+                              {meta && meta.close_time && <span className="text-white/60 text-base">{fmtCountdown(meta.close_time)} to close</span>}
+                            </div>
+                            {w.is_resolved && <div className="flex items-center gap-1 mt-1"><span className={'text-xl font-bold ' + (w.resolution_outcome === 'YES' ? 'text-emerald-300' : 'text-red-300')}>Resolved {w.resolution_outcome}</span></div>}
+                            {!w.is_resolved && <div className="flex items-center gap-1 mt-1"><CheckIcon /><span className="text-xl text-green-300">Watching</span></div>}
                           </div>
-                          <button onClick={() => delPlayer(w.id)} className="p-2 text-red-400 hover:bg-red-900/30 rounded-lg ml-2 shrink-0"><TrashIcon /></button>
+                          <button onClick={() => delMarket(w.id)} className="p-2 text-red-400 hover:bg-red-900/30 rounded-lg ml-2 shrink-0"><TrashIcon /></button>
                         </div>
                       </div>
                     );
@@ -1221,30 +1436,32 @@ function App() {
           </div>
         )}
 
-        {page === 'myplayers' && (
+        {page === 'mymarkets' && (
           <div className="space-y-3" style={{ paddingTop: '1rem' }}>
             <div className={cardClass} style={cardStyle}>
-              <CardPageHeader title="My Players" subtitle="Your saved players and stats" />
+              <CardPageHeader title="My Markets" subtitle="Live prices and resolution status" />
               <gate.CounterBanner />
-              {watchlist.length === 0 ? (<div className="text-center py-6"><p className="text-gray-200 text-xl leading-relaxed">Search for a player and save them here.</p></div>) : (
+              {watchlist.length === 0 ? (<div className="text-center py-6"><p className="text-gray-200 text-xl leading-relaxed">Search for a market and save it here.</p></div>) : (
                 <div className="space-y-3">
-                  <p className="text-gray-300 text-lg text-center mb-1">Tap a name to see latest stats</p>
+                  <p className="text-gray-300 text-lg text-center mb-1">Tap a market for live data</p>
                   {watchlist.map(w => {
                     const meta = parseMeta(w.location);
+                    const snap = getSnapshot(w.id);
                     return (
                       <div key={w.id} className="p-4 bg-black/50 rounded-lg border border-white/15">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-3 flex-1 min-w-0">
-                            {meta && meta.headshot ? <img src={meta.headshot} alt={w.name} className="w-14 h-14 rounded-full object-cover border border-white/20 shrink-0" /> : <div className="w-14 h-14 rounded-full bg-black/40 flex items-center justify-center shrink-0 text-xl text-white">?</div>}
-                            <div className="flex-1 min-w-0">
-                              <button onClick={() => openMyPlayersDrawer(w)} className="text-left w-full">
-                                <h3 className="font-semibold text-2xl text-white underline decoration-dotted truncate">{w.name}</h3>
-                              </button>
-                              {meta && meta.team && <p className="text-base text-gray-300">{meta.team}</p>}
-                              {meta && meta.position && <p className="text-base text-white/60">{meta.position}</p>}
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1 min-w-0">
+                            <button onClick={() => openMyMarketsDrawer(w)} className="text-left w-full">
+                              <h3 className="font-semibold text-2xl text-white underline decoration-dotted leading-snug">{w.name}</h3>
+                            </button>
+                            <div className="flex items-center gap-3 mt-2 flex-wrap">
+                              {snap && snap.last_price !== undefined && <span className="text-emerald-300 text-2xl font-bold" style={{ fontFamily: 'var(--sw-display-font)' }}>{fmtPrice(snap.last_price)}</span>}
+                              {meta && meta.category && <span className="text-white/60 text-base uppercase">{meta.category}</span>}
                             </div>
+                            {meta && meta.close_time && <p className="text-base text-white/60 mt-1">{fmtCountdown(meta.close_time)} to close</p>}
+                            {w.is_resolved && <p className={'text-xl font-bold mt-1 ' + (w.resolution_outcome === 'YES' ? 'text-emerald-300' : 'text-red-300')}>Resolved {w.resolution_outcome}</p>}
                           </div>
-                          <button onClick={() => delPlayer(w.id)} className="p-2 text-red-400 hover:bg-red-900/30 rounded-lg ml-2 shrink-0"><TrashIcon /></button>
+                          <button onClick={() => delMarket(w.id)} className="p-2 text-red-400 hover:bg-red-900/30 rounded-lg ml-2 shrink-0"><TrashIcon /></button>
                         </div>
                       </div>
                     );
@@ -1258,18 +1475,18 @@ function App() {
         {page === 'notifications' && (
           <div className="space-y-3" style={{ paddingTop: '1rem' }}>
             <div className={cardClass} style={cardStyle}>
-              <CardPageHeader title="Alerts" subtitle="Trades, injuries, retirements, milestones" />
+              <CardPageHeader title="Alerts" subtitle="Price moves, resolutions, time-to-close" />
               {!gate.isAuthed ? (
-                <gate.EmptyState message="Sign up to get 12-hour injury and news alerts when your players make headlines." ctaLabel="Sign up" />
-              ) : notifications.length === 0 ? (<div className="text-center py-4"><p className="text-white font-bold text-2xl">No alerts yet</p><p className="text-gray-200 text-xl mt-1">We check your players every 12 hours.</p></div>) : (
+                <gate.EmptyState message="Sign up to get 12-hour price-move alerts when your markets shift." ctaLabel="Sign up" />
+              ) : notifications.length === 0 ? (<div className="text-center py-4"><p className="text-white font-bold text-2xl">No alerts yet</p><p className="text-gray-200 text-xl mt-1">We check your markets every 12 hours.</p></div>) : (
                 <div className="space-y-3">
                   {notifications.map(n => (
                     <div key={n.id} className="p-3 bg-black/50 border border-white/15 rounded-xl">
-                      <h3 className="font-bold text-white text-xl mb-1">{n.name}</h3>
+                      <h3 className="font-bold text-white text-xl mb-1 leading-snug">{n.name}</h3>
                       <p className="text-gray-200 text-xl">{n.message}</p>
-                      <p className="text-gray-400 text-base mt-1 mb-2">{new Date(n.created_at).toLocaleDateString()}</p>
+                      <p className="text-gray-400 text-base mt-1 mb-2">{new Date(n.created_at).toLocaleString()}</p>
                       <div className="flex gap-2">
-                        <button onClick={() => viewAlert(n)} className="flex-1 py-2 text-white rounded-lg text-xl font-bold" style={{ backgroundColor: 'var(--pw-accent)' }}>View</button>
+                        <button onClick={() => viewAlert(n)} className="flex-1 py-2 text-white rounded-lg text-xl font-bold" style={{ backgroundColor: 'var(--sw-accent)' }}>View</button>
                         <button onClick={() => dismissAlert(n.id)} className="flex-1 py-2 bg-transparent border border-white/30 text-white/80 rounded-lg text-xl">Dismiss</button>
                       </div>
                     </div>
@@ -1284,8 +1501,8 @@ function App() {
           <div className="space-y-4 pb-8" style={{ paddingTop: '1rem' }}>
             <div className={cardClass} style={cardStyle}>
               <div className="mb-3 pb-2 border-b border-white/15 text-center">
-                <h2 className="text-4xl font-black text-white" style={{ fontFamily: 'var(--pw-display-font)', letterSpacing: '0.06em', textTransform: 'uppercase', WebkitTextStroke: '1px #fff' }}>About</h2>
-                <h2 className="text-4xl font-black text-white" style={{ fontFamily: 'var(--pw-display-font)', letterSpacing: '0.06em', textTransform: 'uppercase', WebkitTextStroke: '1px #fff' }}>{APP_NAME}</h2>
+                <h2 className="text-4xl font-bold text-white" style={{ fontFamily: 'var(--sw-display-font)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>About</h2>
+                <h2 className="text-4xl font-bold text-white" style={{ fontFamily: 'var(--sw-display-font)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>{APP_NAME}</h2>
               </div>
               <p className="text-white/80 italic text-xl text-center mb-3">v{APP_VERSION}</p>
               <div className="flex items-center gap-4 mb-4">
@@ -1293,43 +1510,55 @@ function App() {
                 <div>
                   <p className="font-bold text-white text-xl">Bill Spencer</p>
                   <p className="text-white/70 italic text-xl">Founder</p>
-                  <a href="mailto:hello@playerwatch.app" className="text-white/80 text-xl mt-1 block">hello@playerwatch.app</a>
+                  <a href="mailto:hello@stakeswatch.app" className="text-white/80 text-xl mt-1 block">hello@stakeswatch.app</a>
                 </div>
               </div>
               <p className="text-white text-2xl font-bold italic mb-3">{TAGLINE}</p>
               <div className="space-y-3 text-gray-100 text-xl leading-relaxed">
-                <p>The players you care about, all in one place.</p>
-                <p>Add anyone across the NFL, NBA, MLB, NHL, or MLS to your watchlist. Player Watch keeps tabs on the moves that matter -- trades, injuries, retirements, and milestones -- and tells you when something changes.</p>
-                <p>No bloat. No noise. Just the players you picked.</p>
+                <p>The prediction markets you care about, all in one place.</p>
+                <p>Add any open market on Kalshi — politics, the Fed, crypto, sports, weather, awards — to your watchlist. Stakes Watch tracks the price and tells you when it moves past your threshold, when it's about to resolve, and when it does.</p>
+                <p>We're not a broker. We don't take trades. We just watch the markets you pick.</p>
               </div>
             </div>
             <div className={cardClass} style={cardStyle}>
-              <h3 className="text-white text-2xl font-bold mb-4 text-center" style={{ fontFamily: 'var(--pw-display-font)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>How it works</h3>
+              <h3 className="text-white text-2xl font-bold mb-4 text-center" style={{ fontFamily: 'var(--sw-display-font)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>How it works</h3>
               <div className="space-y-4">
-                <div className="flex gap-3 items-start"><span className="text-white text-2xl font-black w-7 shrink-0">1.</span><p className="text-gray-100 text-xl">Search for a player. We pull their bio from Wikipedia and stats from ESPN.</p></div>
-                <div className="flex gap-3 items-start"><span className="text-white text-2xl font-black w-7 shrink-0">2.</span><p className="text-gray-100 text-xl">Save them with one tap. We capture their stats right away to your My Players page.</p></div>
-                <div className="flex gap-3 items-start"><span className="text-white text-2xl font-black w-7 shrink-0">3.</span><p className="text-gray-100 text-xl">Tap a name on Watchlist to see their card and check for new stats.</p></div>
-                <div className="flex gap-3 items-start"><span className="text-white text-2xl font-black w-7 shrink-0">4.</span><p className="text-gray-100 text-xl">Tap a name on My Players to see their latest saved stats.</p></div>
+                <div className="flex gap-3 items-start"><span className="text-white text-2xl font-bold w-7 shrink-0">1.</span><p className="text-gray-100 text-xl">Search for a market by keyword: "Fed", "Bitcoin", "Super Bowl", "hurricane".</p></div>
+                <div className="flex gap-3 items-start"><span className="text-white text-2xl font-bold w-7 shrink-0">2.</span><p className="text-gray-100 text-xl">Save the ones you want to follow. We capture the current YES price.</p></div>
+                <div className="flex gap-3 items-start"><span className="text-white text-2xl font-bold w-7 shrink-0">3.</span><p className="text-gray-100 text-xl">Tap a market on Watchlist to check the current price right now.</p></div>
+                <div className="flex gap-3 items-start"><span className="text-white text-2xl font-bold w-7 shrink-0">4.</span><p className="text-gray-100 text-xl">We check every hour. If a market moves past 10%, hits its 24h or 1h close window, or resolves — you get an alert.</p></div>
               </div>
             </div>
             <div className={cardClass} style={cardStyle}>
-              <h3 className="font-bold text-white mb-1 text-2xl" style={{ fontFamily: 'var(--pw-display-font)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>Privacy</h3>
-              <p className="text-white/60 text-xl mb-3">Last updated: April 2026</p>
+              <h3 className="text-white text-2xl font-bold mb-3 text-center" style={{ fontFamily: 'var(--sw-display-font)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>What kinds of markets trade</h3>
+              <p className="text-white/50 text-base text-center italic mb-4">Reference guide — expanded in future versions</p>
+              <div className="space-y-3 text-gray-100 text-xl leading-relaxed">
+                <p><strong className="text-white">Politics & elections</strong> — vote outcomes, approval ratings, primary results.</p>
+                <p><strong className="text-white">Economy & Fed</strong> — rate decisions, inflation prints, GDP releases.</p>
+                <p><strong className="text-white">Crypto</strong> — Bitcoin and Ethereum price targets, ETF flows.</p>
+                <p><strong className="text-white">Sports</strong> — Super Bowl, NBA championship, World Series, Stanley Cup, World Cup.</p>
+                <p><strong className="text-white">Weather</strong> — hurricanes, temperature records, snowfall.</p>
+                <p><strong className="text-white">Pop culture</strong> — Oscars, Grammys, Emmys, awards.</p>
+                <p><strong className="text-white">Tech</strong> — AI benchmarks, space launches, product milestones.</p>
+              </div>
+            </div>
+            <div className={cardClass} style={cardStyle}>
+              <h3 className="font-bold text-white mb-1 text-2xl" style={{ fontFamily: 'var(--sw-display-font)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>Privacy</h3>
+              <p className="text-white/60 text-xl mb-3">Last updated: May 2026</p>
               <div className="space-y-3 text-gray-100 text-xl leading-relaxed">
                 <p><strong className="text-white">We collect:</strong> your email, watchlist, and search activity.</p>
-                <p><strong className="text-white">We do not:</strong> sell your data, ever.</p>
-                <p><strong className="text-white">Sources:</strong> Bio data from Wikipedia. Stats and player data from ESPN's public APIs.</p>
+                <p><strong className="text-white">We do not:</strong> sell your data, ever. We do not place trades or hold money.</p>
+                <p><strong className="text-white">Sources:</strong> Market data from Kalshi's public API.</p>
                 <p><strong className="text-white">Your rights:</strong> Delete your account and all data anytime.</p>
-                <a href="mailto:hello@playerwatch.app" className="text-white/80 text-xl">hello@playerwatch.app</a>
+                <a href="mailto:hello@stakeswatch.app" className="text-white/80 text-xl">hello@stakeswatch.app</a>
               </div>
             </div>
-            {/* Try our other Watchlist apps */}
             <div className={cardClass} style={cardStyle}>
               <h3 className="text-white text-2xl font-bold mb-3 text-center">Try our other Watchlist apps</h3>
               <div className="space-y-3">
                 <a href="https://3brains.app" target="_blank" rel="noopener noreferrer"
                   className="block w-full py-4 text-white text-center rounded-xl text-xl font-semibold"
-                  style={{ backgroundColor: 'var(--pw-accent)' }}>
+                  style={{ backgroundColor: 'var(--sw-accent)' }}>
                   Visit Our Site
                 </a>
               </div>
@@ -1338,7 +1567,7 @@ function App() {
               {gate.isAuthed ? (
                 <>
                   <div className="p-3 bg-black/40 rounded-xl"><p className="font-medium text-white text-xl text-center">{user && user.email}</p></div>
-                  <button onClick={doLogout} className="w-full py-4 text-white rounded-xl text-2xl font-bold" style={{ backgroundColor: 'var(--pw-accent)' }}>Sign Out</button>
+                  <button onClick={doLogout} className="w-full py-4 text-white rounded-xl text-2xl font-bold" style={{ backgroundColor: 'var(--sw-accent)' }}>Sign Out</button>
                   <button onClick={() => setShowDangerZone(!showDangerZone)} className="w-full py-3 text-white/60 text-xl text-center">{showDangerZone ? 'Hide' : 'Account Removal'}</button>
                   {showDangerZone && (
                     <div className="space-y-3">
@@ -1349,10 +1578,10 @@ function App() {
               ) : (
                 <>
                   <div className="p-3 bg-black/40 rounded-xl text-center">
-                    <p className="text-white text-xl mb-2">Trying it out? You can save up to {AUTH_GATE_CONFIG.freeAnonLimit} players without an account.</p>
-                    <p className="text-white/70 text-lg">Sign up for unlimited saves and 12-hour injury and news alerts.</p>
+                    <p className="text-white text-xl mb-2">Trying it out? You can save up to {AUTH_GATE_CONFIG.freeAnonLimit} markets without an account.</p>
+                    <p className="text-white/70 text-lg">Sign up for unlimited saves and 12-hour price-move alerts.</p>
                   </div>
-                  <button onClick={() => gate.openSignup()} className="w-full py-4 text-white rounded-xl text-2xl font-bold" style={{ backgroundColor: 'var(--pw-accent)' }}>Sign Up</button>
+                  <button onClick={() => gate.openSignup()} className="w-full py-4 text-white rounded-xl text-2xl font-bold" style={{ backgroundColor: 'var(--sw-accent)' }}>Sign Up</button>
                   <button onClick={() => gate.openSignin()} className="w-full py-3 bg-white/10 border border-white/20 text-white rounded-xl text-xl">Already have an account? Sign In</button>
                 </>
               )}
@@ -1363,18 +1592,18 @@ function App() {
 
       </div>
 
-      <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, backgroundColor: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(8px)', borderTop: '1px solid rgba(255,255,255,0.15)', padding: '0.5rem 1rem', paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom))' }}>
+      <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, backgroundColor: 'rgba(10,21,37,0.92)', backdropFilter: 'blur(8px)', borderTop: '1px solid rgba(255,255,255,0.15)', padding: '0.5rem 1rem', paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom))' }}>
         <div className="flex justify-around max-w-sm mx-auto">
           <button onClick={() => { clearSearch(); setPage('search'); }} className={'flex flex-col items-center gap-0.5 px-1 py-1 ' + (page === 'search' ? 'text-white' : 'text-gray-400')}><SearchIcon /><span className="text-xl font-medium">Search</span></button>
           <button onClick={() => setPage('watchlist')} className={'flex flex-col items-center gap-0.5 px-1 py-1 ' + (page === 'watchlist' ? 'text-white' : 'text-gray-400')}><HeartIcon /><span className="text-xl font-medium">Watchlist</span></button>
-          <button onClick={() => setPage('myplayers')} className={'flex flex-col items-center gap-0.5 px-1 py-1 ' + (page === 'myplayers' ? 'text-white' : 'text-gray-400')}>
-            <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
-            <span className="text-xl font-medium">My Players</span>
+          <button onClick={() => setPage('mymarkets')} className={'flex flex-col items-center gap-0.5 px-1 py-1 ' + (page === 'mymarkets' ? 'text-white' : 'text-gray-400')}>
+            <ChartIcon />
+            <span className="text-xl font-medium">My Markets</span>
           </button>
           <button onClick={() => setPage('about')} className={'flex flex-col items-center gap-0.5 px-1 py-1 ' + (page === 'about' ? 'text-white' : 'text-gray-400')}><InfoIcon /><span className="text-xl font-medium">Info</span></button>
           <button onClick={() => setPage('notifications')} className={'flex flex-col items-center gap-0.5 px-1 py-1 relative ' + (page === 'notifications' ? 'text-white' : 'text-gray-400')}>
             <BellIcon red={unreadCount > 0} />
-            {unreadCount > 0 && <span className="absolute top-0 right-1 text-white text-xl font-bold rounded-full w-4 h-4 flex items-center justify-center" style={{ backgroundColor: 'var(--pw-accent-2)' }}>{unreadCount > 9 ? '9+' : unreadCount}</span>}
+            {unreadCount > 0 && <span className="absolute top-0 right-1 text-white text-xl font-bold rounded-full w-4 h-4 flex items-center justify-center" style={{ backgroundColor: 'var(--sw-accent-2)' }}>{unreadCount > 9 ? '9+' : unreadCount}</span>}
             <span className="text-xl font-medium">Alerts</span>
           </button>
         </div>
@@ -1385,41 +1614,44 @@ function App() {
 
   function SearchResultView() {
     if (!searchResults) return null;
-    const { wiki, espnPlayers, queryName } = searchResults;
-    if (!selectedPlayer && espnPlayers.length > 1) {
+    const { markets, query } = searchResults;
+    if (!selectedMarket && markets.length > 1) {
       return (
-        <div className="rounded-2xl overflow-hidden border border-white/15 shadow-lg" style={{ backgroundColor: 'rgba(0,0,0,0.55)' }}>
-          <div className="px-5 py-3 bg-yellow-700 text-center"><p className="text-white font-black text-3xl">Multiple Players Found</p><p className="text-white/90 text-xl">Pick the right one</p></div>
+        <div className="rounded-2xl overflow-hidden border border-white/15 shadow-lg" style={{ backgroundColor: 'rgba(10,21,37,0.65)' }}>
+          <div className="px-5 py-3 text-center" style={{ background: 'linear-gradient(90deg, #0d3a3a, #0a1f4a)' }}><p className="text-white font-bold text-2xl">{markets.length} markets found</p><p className="text-white/80 text-xl">Pick one</p></div>
           <div className="p-4 space-y-2">
-            {espnPlayers.map((p, i) => (
-              <button key={i} onClick={() => setSelectedPlayer(p)} className="w-full p-3 bg-black/40 border border-white/15 rounded-xl text-left">
-                <div className="flex items-center gap-3">
-                  {p.headshot ? <img src={p.headshot} alt={p.displayName} className="w-12 h-12 rounded-full object-cover border border-white/20 shrink-0" /> : <div className="w-12 h-12 rounded-full bg-black/40 flex items-center justify-center shrink-0 text-lg text-white">?</div>}
-                  <div className="flex-1 min-w-0">
-                    <p className="text-white text-2xl font-bold truncate">{p.displayName}</p>
-                    <p className="text-white/70 text-xl truncate">{[p.team, p.position].filter(Boolean).join(' • ')}</p>
-                    {p.league && <p className="text-white/50 text-base uppercase">{p.league}</p>}
+            {markets.map((m, i) => {
+              const heading = marketHeading(m);
+              const detail = marketDetail(m);
+              const title = detail ? heading + ' · ' + detail : heading;
+              return (
+                <button key={i} onClick={() => setSelectedMarket(m)} className="w-full p-3 bg-black/40 border border-white/15 rounded-xl text-left">
+                  <p className="text-white text-xl font-bold leading-snug">{title}</p>
+                  <div className="flex items-center gap-3 mt-1 flex-wrap">
+                    {m.last_price !== null && m.last_price !== undefined && <span className="text-emerald-300 text-xl font-bold">{fmtPrice(m.last_price)} YES</span>}
+                    {m.category && <span className="text-white/60 text-sm uppercase">{m.category}</span>}
+                    {m.close_time && <span className="text-white/60 text-sm">{fmtCountdown(m.close_time)} to close</span>}
                   </div>
-                </div>
-              </button>
-            ))}
+                </button>
+              );
+            })}
             <button onClick={clearSearch} className="w-full py-3 bg-white/10 border border-white/20 text-white/80 rounded-xl text-xl text-center mt-2">Clear Search</button>
           </div>
         </div>
       );
     }
-    if (espnPlayers.length === 0) {
+    if (markets.length === 0) {
       return (
-        <div className="rounded-2xl overflow-hidden border border-white/15 shadow-lg" style={{ backgroundColor: 'rgba(0,0,0,0.55)' }}>
-          <div className="px-5 py-3 bg-blue-800 text-center"><p className="text-white font-black text-3xl">{queryName}</p><p className="text-white/90 text-xl">No ESPN match found</p></div>
+        <div className="rounded-2xl overflow-hidden border border-white/15 shadow-lg" style={{ backgroundColor: 'rgba(10,21,37,0.65)' }}>
+          <div className="px-5 py-3 text-center" style={{ background: 'linear-gradient(90deg, #0d3a3a, #0a1f4a)' }}><p className="text-white font-bold text-2xl">No markets matched "{query}"</p></div>
           <div className="p-4">
-            {wiki ? (<><PlayerCard wiki={wiki} espnPlayer={null} showSaveButton={false} /><p className="text-yellow-300 text-base text-center mt-3">Wikipedia bio shown above. ESPN couldn't match this name -- try a more specific spelling.</p></>) : (<p className="text-gray-200 text-xl text-center py-4">No results from Wikipedia or ESPN.</p>)}
+            <p className="text-gray-200 text-xl text-center py-2">Try a broader keyword (e.g. "fed", "bitcoin", "election").</p>
             <button onClick={clearSearch} className="w-full py-3 bg-white/10 border border-white/20 text-white/80 rounded-xl text-xl text-center mt-2">Clear Search</button>
           </div>
         </div>
       );
     }
-    return <PlayerCard wiki={wiki} espnPlayer={selectedPlayer || espnPlayers[0]} showSaveButton={true} />;
+    return <MarketCard market={selectedMarket || markets[0]} showSaveButton={true} />;
   }
 }
 
