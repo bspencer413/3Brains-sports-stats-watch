@@ -61,7 +61,7 @@ const { useState, useEffect } = React;
 
 /* SKIN BLOCK -- mirrors what reskinner v0.3 will produce. */
 const APP_NAME = 'Player Watch';
-const APP_VERSION = '1.0.30';
+const APP_VERSION = '1.0.31';
 const API_BASE = 'https://playerwatch-backend.onrender.com';
 const PW_REPO = 'https://raw.githubusercontent.com/bspencer413/3Brains-sports-stats-watch/main';
 const SIGNIN_BG = PW_REPO + '/signin-background.jpg';
@@ -1011,13 +1011,18 @@ function App() {
         // Hit the anon 5-cap -- AuthGate opened the signup modal.
         return;
       }
+      // v1.0.31: navigate off the search view FIRST, before the stat fetch
+      // below. Otherwise the just-saved player re-renders the search card,
+      // which flips to "Already saved" during the (slow) fetch and looks like
+      // a bogus warning. Leaving the search card up during the await was the
+      // whole bug.
+      clearSearch(); setPage('myplayers');
+      if (created.id) setAutoOpenId(created.id);
       if (selectedPlayer && selectedPlayer.sport && selectedPlayer.league && selectedPlayer.id) {
         const overview = await fetchEspnOverview(selectedPlayer.sport, selectedPlayer.league, selectedPlayer.id).catch(() => null);
         const snap = buildSnapshot(overview);
         if (snap && created.id) saveStatSnapshot(created.id, snap);
       }
-      clearSearch(); setPage('myplayers');
-      if (created.id) setAutoOpenId(created.id);
     } catch(e) { alert('Error: ' + e.message); }
     finally { setLoadingSave(false); }
   };
