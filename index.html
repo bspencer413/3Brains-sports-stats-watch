@@ -61,7 +61,7 @@ const { useState, useEffect } = React;
 
 /* SKIN BLOCK -- mirrors what reskinner v0.3 will produce. */
 const APP_NAME = 'Player Watch';
-const APP_VERSION = '1.0.29';
+const APP_VERSION = '1.0.30';
 const API_BASE = 'https://playerwatch-backend.onrender.com';
 const PW_REPO = 'https://raw.githubusercontent.com/bspencer413/3Brains-sports-stats-watch/main';
 const SIGNIN_BG = PW_REPO + '/signin-background.jpg';
@@ -74,7 +74,7 @@ const isTablet = window.innerWidth >= 500 && window.innerWidth < 1024;
 const PT = isPhone ? '36vh' : isTablet ? '40vh' : '38vh';
 
 // ============================================================================
-// AuthGate v0.3.2 — 3Brains portable account + anonymous-storage component
+// AuthGate v0.3.3 — 3Brains portable account + anonymous-storage component
 // ============================================================================
 //
 // PURPOSE
@@ -438,6 +438,15 @@ function useAuthGate(config) {
       // Replay pending action after isAuthed has propagated. We re-do the
       // add through serverAdd directly (not gate.add) because the closure
       // captured the old isAuthed=false.
+      // v0.3.3: after the replay, tell the host so it can move the user off the
+      // stale search view onto their saved list. Without this, the item that
+      // hit the cap is left on screen and re-tapping Save says "already saved".
+      const notifyHost = () => {
+        if (typeof config.onAuthSuccess === 'function') {
+          try { config.onAuthSuccess({ hadPendingAdd: !!(pa && pa.type === 'add') }); }
+          catch (e) {}
+        }
+      };
       if (pa) {
         setTimeout(async () => {
           try {
@@ -448,7 +457,10 @@ function useAuthGate(config) {
               await refreshList();
             }
           } catch (e) { console.error('AuthGate: replay pending action failed', e); }
+          notifyHost();
         }, 100);
+      } else {
+        notifyHost();
       }
     } catch (e) {
       clearTimeout(wakeTimer); setBackendWaking(false);
@@ -647,7 +659,7 @@ function useAuthGate(config) {
   };
 }
 
-// === END AuthGate v0.3.2 ======================================================
+// === END AuthGate v0.3.3 ======================================================
 
 
 // Helpers
@@ -874,7 +886,12 @@ const StatPanel = ({ overview }) => {
 };
 
 function App() {
-  const gate = useAuthGate(AUTH_GATE_CONFIG);
+  const gate = useAuthGate(Object.assign({}, AUTH_GATE_CONFIG, {
+    // v0.3.3: after a capped-save signup, land the user on their saved list.
+    onAuthSuccess: function (ctx) {
+      if (ctx && ctx.hadPendingAdd) { clearSearch(); setPage('myplayers'); }
+    }
+  }));
   // Compatibility shims -- read-only access for the rest of App().
   // Writes go through gate.add / gate.remove / gate.signOut / gate.openSignup.
   const auth = gate.isAuthed;
